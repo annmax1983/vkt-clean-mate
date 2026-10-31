@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VKT CleanMate — Preview-first browsing data cleaner</title>
+<meta name="description" content="VKT CleanMate cleans browsing history, cache and cookies on your terms. See what will be deleted before it is deleted, keep trusted sites untouched, and find out where your focus time goes.">
+<link rel="icon" href="icons/icon128.png">
+<style>
+:root{
+  --accent:#3b82f6;
+  --accent-2:#6366f1;
+  --bg:#f6f8fc;
+  --surface:#ffffff;
+  --ink:#0f172a;
+  --body:#42506b;
+  --muted:#6b7892;
+  --line:#e4e9f2;
+  --tint:color-mix(in srgb, var(--accent) 8%, #ffffff);
+  --shadow:0 20px 48px rgba(15,23,42,.10);
+  --shadow-soft:0 8px 24px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:92px}
+body{
+  margin:0;color:var(--body);background:var(--bg);
+  font-family:"Segoe UI Variable Text","Segoe UI",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+[hidden]{display:none !important}
+::selection{background:color-mix(in srgb, var(--accent) 22%, #fff);color:var(--ink)}
+.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topbar-inner{display:flex;align-items:center;gap:16px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:800;font-size:16px;letter-spacing:-.015em}
+.brand:hover{text-decoration:none}
+.brand img{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.nav-links{display:flex;align-items:center;gap:20px;margin-left:auto;font-size:13.5px;font-weight:650}
+.nav-links a{color:var(--muted)}
+.nav-links a:hover{color:var(--accent);text-decoration:none}
+.top-actions{display:flex;align-items:center;gap:9px;margin-left:auto}
+.nav-links + .top-actions{margin-left:0}
+.icon-btn{width:38px;height:38px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--muted)}
+.icon-btn:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 26%,var(--line));text-decoration:none}
+@media(max-width:760px){.nav-links{display:none}.top-actions{margin-left:auto}}
+
+/* hero */
+.hero{padding:64px 0 44px;position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;right:-160px;top:-180px;width:620px;height:620px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 62%);
+  pointer-events:none;
+}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--accent);font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+h1{color:var(--ink);font-size:clamp(30px,4.4vw,46px);line-height:1.1;letter-spacing:-.035em;font-weight:800;margin:16px 0 14px}
+h1 em{font-style:normal;background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:17px;max-width:560px;margin-bottom:22px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-weight:700;font-size:14px;border:1px solid var(--line);background:#fff;color:var(--ink);transition:.16s}
+.btn:hover{text-decoration:none;border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff;box-shadow:0 12px 26px -12px rgba(59,130,246,.85)}
+.btn-primary:hover{color:#fff;filter:brightness(1.05)}
+.meta{font-size:12.5px;color:var(--muted)}
+
+/* 模拟窗口 */
+.mock{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.mock-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line);background:#fbfcfe}
+.dot{width:8px;height:8px;border-radius:50%;background:#e2e8f2}
+.mock-body{padding:13px 14px}
+.mrow{display:flex;justify-content:space-between;align-items:baseline;padding:7px 10px;border-radius:8px;background:#f7f9fd;font-size:12px;margin-bottom:6px}
+.mrow b{color:var(--ink);font-variant-numeric:tabular-nums}
+.mrow.good b{color:#16a34a}
+.mrow.warn{background:rgba(245,158,11,.1)}
+.mrow.warn b{color:#b45309}
+.mbtn{margin-top:9px;width:100%;padding:10px;border:none;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;font-size:12.5px}
+.mnote{font-size:10.5px;color:var(--muted);text-align:center;margin-top:7px}
+
+/* sections */
+.block{padding:56px 0}
+.section-head{max-width:720px;margin:0 0 26px}
+.kicker{margin:0 0 9px;color:var(--accent);font-size:11.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+.section-head h2,.support-copy h2{color:var(--ink);font-size:clamp(24px,3vw,31px);line-height:1.15;letter-spacing:-.025em;font-weight:800;margin:0 0 10px}
+.section-head p{margin:0;color:var(--muted);font-size:15px;line-height:1.65}
+.cards{margin-bottom:22px}
+.why-block{margin:0 0 26px}
+.why-block h3{color:var(--ink);font-size:16px;margin:0 0 4px}
+.why-block > p{margin:0 0 14px;font-size:13.5px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:860px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow-soft)}
+.card-num{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--tint);color:var(--accent);font-weight:800;font-size:13px;margin-bottom:12px}
+.card h3{color:var(--ink);font-size:15px;margin:0 0 6px}
+.card p{margin:0;font-size:13.5px}
+
+.features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:760px){.features{grid-template-columns:1fr}}
+.feat{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+.feat-ico{flex:none;width:26px;text-align:center;font-size:16px;line-height:1.5}
+.feat b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:2px}
+.feat span{font-size:13px}
+
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:14px;box-shadow:var(--shadow-soft)}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:none}
+th{background:#fbfcfe;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+td:last-child,th:last-child{text-align:center;width:90px}
+.yes{color:#16a34a;font-weight:800}
+.no{color:#c3cbd9;font-weight:800}
+
+.honest{background:#fff;border:1px solid var(--line);border-left:4px solid #f59e0b;border-radius:12px;padding:20px 22px}
+.honest h3{color:var(--ink);margin:0 0 10px;font-size:15px}
+.honest ul{margin:0;padding-left:20px;font-size:13.5px}
+.honest li{margin:6px 0}
+
+.plan-note{margin:14px 0 0;font-size:13.5px;color:var(--muted)}
+
+/* privacy block */
+.privacy-panel{display:grid;grid-template-columns:1.3fr .7fr;gap:26px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:var(--shadow-soft)}
+@media(max-width:860px){.privacy-panel{grid-template-columns:1fr}}
+.privacy-panel h2{color:var(--ink);font-size:clamp(22px,2.6vw,27px);line-height:1.18;letter-spacing:-.02em;font-weight:800;margin:0 0 10px}
+.panel-lead{margin:0 0 14px;font-size:14.5px}
+.points{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:16px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.point{display:inline-flex;align-items:center;gap:6px}
+.point::before{content:"✓";color:#16a34a;font-weight:800}
+.text-link{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:700}
+.text-link:hover{text-decoration:none;gap:10px}
+.perm-box{background:#f7f9fd;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.perm-box h3{color:var(--ink);font-size:13px;margin:0 0 8px;letter-spacing:.02em;text-transform:uppercase;font-size:11.5px;font-weight:800;color:var(--muted)}
+.perm-box ul{margin:0;padding-left:18px;font-size:12.5px;line-height:1.85}
+.perm-box code{background:#fff;border:1px solid var(--line);border-radius:4px;padding:0 4px;font-size:11.5px}
+
+/* support block */
+.support-card{display:grid;grid-template-columns:1.4fr .6fr;gap:24px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 28px;box-shadow:var(--shadow-soft)}
+@media(max-width:860px){.support-card{grid-template-columns:1fr}}
+.support-copy p{font-size:14px;margin:0 0 10px}
+.kofi{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#f7f9fd;border:1px solid var(--line);border-radius:12px;padding:20px 16px;text-align:center}
+.kofi p{margin:0;font-size:12.5px;color:var(--muted)}
+.kofi-note{margin:0;font-size:11.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+
+/* footer */
+.site-footer{margin-top:24px;border-top:1px solid var(--line);background:rgba(255,255,255,.8);padding:32px 0}
+.footer-inner{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
+.footer-brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);font-size:14px}
+.footer-brand img{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.footer-brand .copy{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:1px}
+.footer-links{display:flex;flex-wrap:wrap;gap:9px 18px;align-items:center;font-size:13px;font-weight:600}
+.footer-links a{color:var(--muted)}
+.footer-links a:hover{color:var(--accent);text-decoration:none}
+</style>
+<style>
+/* lang switcher */
+.langs{display:flex;gap:4px;margin-left:10px}
+.top-actions .langs{margin-left:0}
+.langs button{border:1px solid var(--line);background:#fff;color:var(--muted);font:inherit;font-size:11.5px;font-weight:700;padding:3px 7px;border-radius:6px;cursor:pointer;line-height:1.5}
+.langs button:hover{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.langs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+@media(max-width:760px){.langs{margin-left:auto}.topbar-inner{flex-wrap:wrap;height:auto;padding:10px 0}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a class="brand" href="index.html"><img src="icons/icon48.png" alt="" width="30" height="30"><span>VKT CleanMate</span></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#features" data-i="nav.features">Features</a>
+      <a href="#plans" data-i="nav.plans">Free vs Pro</a>
+      <a href="#privacy" data-i="nav.privacy">Privacy</a>
+      <a href="#support" data-i="nav.support">Support</a>
+    </nav>
+    <div class="top-actions">
+      <div class="langs" id="langs"></div>
+      <a class="icon-btn" href="https://github.com/annmax1983/vkt-clean-mate" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.05-.01-1.9-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.4 9.4 0 0 1 12 5.96c.85 0 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg></a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow" data-i="hero.eyebrow">Chrome · Edge · Manifest V3</span>
+        <h1><span data-i="hero.h1a">See what will be deleted</span><br><em data-i="hero.h1b">before it is deleted.</em></h1>
+        <p class="lead" data-i="hero.lead">
+          Most cleaners are one big “wipe everything” button — which is exactly why people are afraid to
+          switch them on. VKT CleanMate shows you the damage first, keeps the sites you trust untouched, and
+          tells you where your focus time actually goes.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" id="ctaMain" href="https://annmax1983.com/extensions/cleanmate" data-i="hero.cta1">Get VKT CleanMate</a>
+          <a class="btn" id="ctaGithub" href="https://github.com/annmax1983/vkt-clean-mate" target="_blank" rel="noopener" data-i="hero.cta2">View on GitHub</a>
+        </div>
+        <p class="meta" data-i="hero.meta">Free targeted mode · No account · No telemetry · Everything local</p>
+      </div>
+
+      <div class="mock">
+        <div class="mock-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="mock-body">
+          <div class="mrow"><span data-i="mock.scope">Scope</span><b data-i="mock.scopeV">Clean list only</b></div>
+          <div class="mrow"><span data-i="mock.sites">Sites found</span><b>12</b></div>
+          <div class="mrow"><span data-i="mock.hist">History entries</span><b>1,284</b></div>
+          <div class="mrow"><span data-i="mock.cook">Cookies</span><b>37</b></div>
+          <div class="mrow warn"><span data-i="mock.prot">Protected hits</span><b data-i="mock.protV">3 skipped</b></div>
+          <div class="mrow good"><span data-i="mock.keep">Keep last</span><b data-i="mock.keepV">7 days</b></div>
+          <button class="mbtn" data-i="mock.btn">Clean 12 sites</button>
+          <p class="mnote" data-i="mock.note">Nothing is removed until you confirm.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">01</p>
+        <h2 data-i="feat.title">What it actually does</h2>
+        <p data-i="feat.sub">Nine data types, five triggers, and a domain rule you can explain in one sentence.</p>
+      </div>
+
+      <div class="why-block">
+        <h3 data-i="why.title">Built around one fear</h3>
+        <p data-i="why.sub">“If I turn this on, will it log me out of everything?”</p>
+        <div class="cards">
+          <div class="card">
+            <div class="card-num">1</div>
+            <h3 data-i="why.c1t">Preview first</h3>
+            <p data-i="why.c1p">Every cleanup starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.</p>
+          </div>
+          <div class="card">
+            <div class="card-num">2</div>
+            <h3 data-i="why.c2t">Targeted by default</h3>
+            <p data-i="why.c2p">Only the domains on your clean list are touched. Everything else is never included, so a free user has no way to lose data by accident.</p>
+          </div>
+          <div class="card">
+            <div class="card-num">3</div>
+            <h3 data-i="why.c3t">Protected where it counts</h3>
+            <p data-i="why.c3p">In Full mode your protected domains are skipped entirely — banks, mail, anything you want to stay signed in to.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="features">
+        <div class="feat"><span class="feat-ico">🧹</span><div><b data-i="feat.f1t">Nine data types</b><span data-i="feat.f1p">History, cache, cookies, downloads, form data, local storage, IndexedDB, service workers and saved passwords — each toggleable.</span></div></div>
+        <div class="feat"><span class="feat-ico">⏱️</span><div><b data-i="feat.f2t">Five triggers</b><span data-i="feat.f2p">Browser startup, browser close, every N minutes, daily at a set time, after N minutes idle.</span></div></div>
+        <div class="feat"><span class="feat-ico">🎚️</span><div><b data-i="feat.f3t">Per-trigger scope</b><span data-i="feat.f3p">Clear only history + cache every few hours, deep-clean when the browser closes.</span></div></div>
+        <div class="feat"><span class="feat-ico">🗓️</span><div><b data-i="feat.f4t">Retention window</b><span data-i="feat.f4p">Keep the last 1 hour, 3, 7 or 30 days — or everything.</span></div></div>
+        <div class="feat"><span class="feat-ico">📊</span><div><b data-i="feat.f5t">Focus footprint (Pro)</b><span data-i="feat.f5p">Time actually spent watching per domain, not tabs opened. Off by default, and only records while its page is open.</span></div></div>
+        <div class="feat"><span class="feat-ico">⌨️</span><div><b data-i="feat.f6t">Shortcuts</b><span data-i="feat.f6p">Alt+Shift+C cleans now, Alt+Shift+X cleans and closes every tab. Both work with auto-clean off.</span></div></div>
+      </div>
+
+      <div class="honest">
+        <h3 data-i="honest.title">What VKT CleanMate cannot do</h3>
+        <ul>
+          <li data-i="honest.l1">It cannot clear DNS caches, router logs, ISP records or server-side logs.</li>
+          <li data-i="honest.l2">It cannot restore deleted history — browsers provide no API to write history back.</li>
+          <li data-i="honest.l3">It cannot clean other browsers’ data, other profiles, or a synced copy on another device.</li>
+          <li data-i="honest.l4">“On browser close” is best-effort: if the browser exits mid-task, cleanup finishes a few seconds after the next start.</li>
+          <li data-i="honest.l5">It cannot limit history, downloads, form data or passwords to a single site — the browser doesn’t expose that, and the UI says so.</li>
+          <li data-i="honest.l6">It is not an anonymity or anti-surveillance tool. It is a self-service privacy tool for your own browser.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="plans">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">02</p>
+        <h2 data-i="price.title">Free vs Pro</h2>
+        <p data-i="price.sub">The free tier deliberately cannot run a full wipe — nobody loses data for not paying.</p>
+      </div>
+      <table>
+        <thead><tr><th data-i="price.th1">Capability</th><th data-i="price.th2">Free</th><th data-i="price.th3">Pro</th></tr></thead>
+        <tbody>
+          <tr><td data-i="price.r1">Targeted mode (clean list, unlimited)</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r2">Manual + scheduled cleaning</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r3">Preview before cleaning</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r4">Full mode (all sites minus protected)</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r5">Protected list</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r6">Focus footprint + suggestions</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r7">Footprint CSV export</td><td class="no">—</td><td class="yes">✓</td></tr>
+        </tbody>
+      </table>
+      <p class="plan-note" data-i="price.note">One licence covers two browsers, and the free features keep working if it expires.</p>
+    </div>
+  </section>
+
+  <section class="block" id="privacy">
+    <div class="wrap">
+      <div class="privacy-panel">
+        <div>
+          <p class="kicker">03</p>
+          <h2 data-i="pr.title">Private by design</h2>
+          <p class="panel-lead" data-i="pr.lead">Your browsing data never leaves the device. There is no account, no analytics and no telemetry — the only outbound request is licence validation, and only if you enter a key.</p>
+          <div class="points">
+            <span class="point" data-i="pr.p1">Nothing uploaded</span>
+            <span class="point" data-i="pr.p2">Footprint off by default</span>
+            <span class="point" data-i="pr.p3">Local-only storage</span>
+          </div>
+          <a class="text-link" href="privacy-policy.html"><span data-i="pr.cta">Read the privacy policy</span> →</a>
+        </div>
+        <aside class="perm-box">
+          <h3 data-i="pr.permTitle">Permissions</h3>
+          <ul>
+            <li><code>browsingData</code> — <span data-i="pr.perm1">delete only what you chose</span></li>
+            <li><code>storage</code> — <span data-i="pr.perm2">settings and footprint</span></li>
+            <li><code>alarms</code> — <span data-i="pr.perm3">schedules</span></li>
+            <li><code>tabs</code> / <code>windows</code> — <span data-i="pr.perm4">current domain, last window closed</span></li>
+            <li><code>history</code> / <code>cookies</code> — <span data-i="pr.perm5">requested only when used</span></li>
+            <li><code>api.annmax1983.com</code> — <span data-i="pr.perm6">licence only</span></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="support">
+    <div class="wrap">
+      <div class="support-card">
+        <div class="support-copy">
+          <p class="kicker">04</p>
+          <h2 data-i="sup.title">💌 A note to you</h2>
+          <p data-i="sup.p1">Thank you for using VKT CleanMate. I built it because every cleaner I tried either wiped everything without asking, or asked so many questions that I gave up.</p>
+          <p data-i="sup.p2">It is not an anonymity tool and it says so plainly. It is a self-service cleanup for your own browser. If it saves you a scare, that is already the best reward — a ☕ would make my day.</p>
+        </div>
+        <div class="kofi">
+          <p data-i="sup.hint">Click below to visit the support page</p>
+          <a class="btn btn-primary" href="https://ko-fi.com/annmax?ref=vkt-clean-mate" target="_blank" rel="noopener" data-i="sup.btn">Support my work</a>
+          <p class="kofi-note">Ko-fi</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <img src="icons/icon48.png" alt="" width="30" height="30">
+      <div>VKT CleanMate<span class="copy" data-i="foot.copy">© 2026 VKT CleanMate</span></div>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="https://annmax1983.com/extensions.html" target="_blank" rel="noopener" data-i="foot.more">More extensions</a>
+      <a href="privacy-policy.html" data-i="foot.privacy">Privacy</a>
+      <a href="https://github.com/annmax1983/vkt-clean-mate" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://annmax1983.com/extensions/cleanmate" target="_blank" rel="noopener" data-i="foot.site">Website</a>
+      <a href="mailto:support@annmax1983.com">support@annmax1983.com</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+const LANGS = {
+  en: {
+    "title": "VKT CleanMate — Preview-first browsing data cleaner",
+    "desc": "VKT CleanMate cleans browsing history, cache and cookies on your terms. See what will be deleted before it is deleted, keep trusted sites untouched, and find out where your focus time goes.",
+    "nav.features": "Features", "nav.plans": "Free vs Pro", "nav.privacy": "Privacy", "nav.support": "Support",
+    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "See what will be deleted", "hero.h1b": "before it is deleted.",
+    "hero.lead": "Most cleaners are one big “wipe everything” button — which is exactly why people are afraid to switch them on. VKT CleanMate shows you the damage first, keeps the sites you trust untouched, and tells you where your focus time actually goes.",
+    "hero.cta1": "Get VKT CleanMate", "hero.cta2": "View on GitHub",
+    "hero.meta": "Free targeted mode · No account · No telemetry · Everything local",
+    "mock.scope": "Scope", "mock.scopeV": "Clean list only", "mock.sites": "Sites found", "mock.hist": "History entries",
+    "mock.cook": "Cookies", "mock.prot": "Protected hits", "mock.protV": "3 skipped", "mock.keep": "Keep last", "mock.keepV": "7 days",
+    "mock.btn": "Clean 12 sites", "mock.note": "Nothing is removed until you confirm.",
+    "why.title": "Built around one fear", "why.sub": "“If I turn this on, will it log me out of everything?”",
+    "why.c1t": "Preview first", "why.c1p": "Every cleanup starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.",
+    "why.c2t": "Targeted by default", "why.c2p": "Only the domains on your clean list are touched. Everything else is never included, so a free user has no way to lose data by accident.",
+    "why.c3t": "Protected where it counts", "why.c3p": "In Full mode your protected domains are skipped entirely — banks, mail, anything you want to stay signed in to.",
+    "feat.title": "What it actually does", "feat.sub": "Nine data types, five triggers, and a domain rule you can explain in one sentence.",
+    "feat.f1t": "Nine data types", "feat.f1p": "History, cache, cookies, downloads, form data, local storage, IndexedDB, service workers and saved passwords — each toggleable.",
+    "feat.f2t": "Five triggers", "feat.f2p": "Browser startup, browser close, every N minutes, daily at a set time, after N minutes idle.",
+    "feat.f3t": "Per-trigger scope", "feat.f3p": "Clear only history + cache every few hours, deep-clean when the browser closes.",
+    "feat.f4t": "Retention window", "feat.f4p": "Keep the last 1 hour, 3, 7 or 30 days — or everything.",
+    "feat.f5t": "Focus footprint (Pro)", "feat.f5p": "Time actually spent watching per domain, not tabs opened. Off by default, and only records while its page is open.",
+    "feat.f6t": "Shortcuts", "feat.f6p": "Alt+Shift+C cleans now, Alt+Shift+X cleans and closes every tab. Both work with auto-clean off.",
+    "price.title": "Free vs Pro", "price.sub": "The free tier deliberately cannot run a full wipe — nobody loses data for not paying.",
+    "price.th1": "Capability", "price.th2": "Free", "price.th3": "Pro",
+    "price.r1": "Targeted mode (clean list, unlimited)", "price.r2": "Manual + scheduled cleaning", "price.r3": "Preview before cleaning",
+    "price.r4": "Full mode (all sites minus protected)", "price.r5": "Protected list", "price.r6": "Focus footprint + suggestions",
+    "price.r7": "Footprint CSV export",
+    "price.note": "One licence covers two browsers, and the free features keep working if it expires.",
+    "pr.title": "Private by design",
+    "pr.lead": "Your browsing data never leaves the device. There is no account, no analytics and no telemetry — the only outbound request is licence validation, and only if you enter a key.",
+    "pr.p1": "Nothing uploaded", "pr.p2": "Footprint off by default", "pr.p3": "Local-only storage",
+    "pr.cta": "Read the privacy policy",
+    "pr.permTitle": "Permissions",
+    "pr.perm1": "delete only what you chose", "pr.perm2": "settings and footprint", "pr.perm3": "schedules",
+    "pr.perm4": "current domain, last window closed", "pr.perm5": "requested only when used", "pr.perm6": "licence only",
+    "sup.title": "\ud83d\udc8c A note to you",
+    "sup.p1": "Thank you for using VKT CleanMate. I built it because every cleaner I tried either wiped everything without asking, or asked so many questions that I gave up.",
+    "sup.p2": "It is not an anonymity tool and it says so plainly. It is a self-service cleanup for your own browser. If it saves you a scare, that is already the best reward \u2014 a \u2615 would make my day.",
+    "sup.hint": "Click below to visit the support page", "sup.btn": "Support my work",
+    "honest.title": "What VKT CleanMate cannot do",
+    "honest.l1": "It cannot clear DNS caches, router logs, ISP records or server-side logs.",
+    "honest.l2": "It cannot restore deleted history — browsers provide no API to write history back.",
+    "honest.l3": "It cannot clean other browsers’ data, other profiles, or a synced copy on another device.",
+    "honest.l4": "“On browser close” is best-effort: if the browser exits mid-task, cleanup finishes a few seconds after the next start.",
+    "honest.l5": "It cannot limit history, downloads, form data or passwords to a single site — the browser doesn’t expose that, and the UI says so.",
+    "honest.l6": "It is not an anonymity or anti-surveillance tool. It is a self-service privacy tool for your own browser.",
+    "foot.copy": "© 2026 VKT CleanMate",
+    "foot.privacy": "Privacy", "foot.site": "Website", "foot.more": "More extensions"
+  },
+  zh_CN: {
+    "title": "VKT CleanMate — 先预览再清理的浏览数据清理器",
+    "desc": "VKT CleanMate 按你的规则清理浏览历史、缓存与 Cookie。删除之前先看清要删什么，信任的站点永不触碰，顺带告诉你时间花在哪了。",
+    "nav.features": "功能", "nav.plans": "免费与 Pro", "nav.privacy": "隐私", "nav.support": "支持",
+    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "先看清要删什么，", "hero.h1b": "再动手删。",
+    "hero.lead": "大多数清理工具就是一个“全部清除”的大按钮 —— 这也正是人们不敢打开它的原因。VKT CleanMate 先把要动的东西摆在你面前，信任的站点一律不碰，还告诉你时间到底花在了哪里。",
+    "hero.cta1": "获取 VKT CleanMate", "hero.cta2": "在 GitHub 查看",
+    "hero.meta": "免费精准模式 · 无需账号 · 无埋点 · 全部本地",
+    "mock.scope": "清理范围", "mock.scopeV": "仅清理名单", "mock.sites": "命中站点", "mock.hist": "历史记录",
+    "mock.cook": "Cookie", "mock.prot": "保护名单命中", "mock.protV": "跳过 3 个", "mock.keep": "保留最近", "mock.keepV": "7 天",
+    "mock.btn": "清理 12 个站点", "mock.note": "在你确认之前，什么都不会删。",
+    "why.title": "围绕一个恐惧设计", "why.sub": "“打开它，会不会把所有网站的登录都退了？”",
+    "why.c1t": "先预览", "why.c1p": "每次清理都先给摘要：命中多少站点、要删多少条历史和 Cookie、按哪一档保留期算。",
+    "why.c2t": "默认精准", "why.c2p": "只动清理名单里的域名，其余站点根本不进入范围，所以免费用户没有误删的路径。",
+    "why.c3t": "该保护的保护住", "why.c3p": "全面模式下，保护名单里的域名整域跳过 —— 银行、邮箱，任何你想保持登录的站点。",
+    "feat.title": "它实际做的事", "feat.sub": "九类数据、五种触发，以及一句话就能讲清的域名规则。",
+    "feat.f1t": "九类数据", "feat.f1p": "历史、缓存、Cookie、下载记录、表单数据、本地存储、IndexedDB、Service Worker 和已保存的密码，各自独立开关。",
+    "feat.f2t": "五种触发", "feat.f2p": "浏览器启动、关闭浏览器、每 N 分钟、每天固定时刻、空闲 N 分钟后。",
+    "feat.f3t": "按触发器分范围", "feat.f3p": "每几小时只清历史和缓存，关闭浏览器时再深度清理。",
+    "feat.f4t": "保留期", "feat.f4p": "保留最近 1 小时、3 天、7 天、30 天，或者全部清除。",
+    "feat.f5t": "专注足迹（Pro）", "feat.f5p": "按域名统计你真正在看的时长，而不是开了多少标签页。默认关闭，且只在足迹页打开时采集。",
+    "feat.f6t": "快捷键", "feat.f6p": "Alt+Shift+C 立即清理，Alt+Shift+X 清理并关闭所有标签页。关掉自动清理也照样可用。",
+    "price.title": "免费版与 Pro", "price.sub": "免费版刻意不提供全清 —— 不会有人因为没付费而丢数据。",
+    "price.th1": "能力", "price.th2": "免费", "price.th3": "Pro",
+    "price.r1": "精准模式（清理名单，不限条数）", "price.r2": "手动 + 定时清理", "price.r3": "清理前预览",
+    "price.r4": "全面模式（清全部但跳过保护名单）", "price.r5": "保护名单", "price.r6": "专注足迹与清理建议",
+    "price.r7": "足迹 CSV 导出",
+    "price.note": "一份授权覆盖两台浏览器，过期后免费功能照常可用。",
+    "pr.title": "隐私是设计出来的",
+    "pr.lead": "浏览数据不出设备。没有账号、没有统计分析、没有埋点 —— 唯一的对外请求是授权校验，而且只在你输入密钥后才发生。",
+    "pr.p1": "什么都不上传", "pr.p2": "足迹默认关闭", "pr.p3": "只存本地",
+    "pr.cta": "查看隐私政策",
+    "pr.permTitle": "权限",
+    "pr.perm1": "只删你选的数据", "pr.perm2": "设置与足迹", "pr.perm3": "定时任务",
+    "pr.perm4": "当前域名、最后窗口关闭", "pr.perm5": "仅在用到时申请", "pr.perm6": "仅授权",
+    "sup.title": "\ud83d\udc8c 写给你的一段话",
+    "sup.p1": "谢谢你用 VKT CleanMate。做它是因为我试过的清理工具，要么一声不响全删，要么问一堆问题问到我放弃。",
+    "sup.p2": "它不是匿名工具，界面上也这么写。它是给你自己浏览器用的自助清理。如果它帮你躲过一次惊吓，那已经是最好回报 —— 一杯 \u2615 会让我开心一整天。",
+    "sup.hint": "点下面的按钮前往支持页面", "sup.btn": "支持我的工作",
+    "honest.title": "VKT CleanMate 做不到什么",
+    "honest.l1": "清不掉 DNS 缓存、路由器日志、运营商记录或网站服务端日志。",
+    "honest.l2": "恢复不了已删除的历史 —— 浏览器没有写入历史的接口。",
+    "honest.l3": "清不了其它浏览器的数据、其它配置文件，或者同步到别的设备上的那一份。",
+    "honest.l4": "“关闭浏览器时”是尽力而为：浏览器在任务中途退出，清理会在下次启动后几秒内补完。",
+    "honest.l5": "历史、下载记录、表单数据、密码无法按站点区分 —— 浏览器不提供这种能力，界面上也写明了。",
+    "honest.l6": "它不是匿名工具，也不是反监控工具。它是给你自己浏览器用的自助隐私工具。",
+    "foot.copy": "© 2026 VKT CleanMate",
+    "foot.privacy": "隐私", "foot.site": "官网", "foot.more": "更多扩展"
+  },
+  ja: {
+    "title": "VKT CleanMate — 削除前に確認できる閲覧データクリーナー",
+    "desc": "VKT CleanMate は履歴・キャッシュ・Cookie を自分のルールで削除します。消える前に内容を確認でき、信頼したサイトはそのまま残せます。",
+    "nav.features": "機能", "nav.plans": "無料と Pro", "nav.privacy": "プライバシー", "nav.support": "サポート",
+    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "何が消えるかを先に見て、", "hero.h1b": "それから削除する。",
+    "hero.lead": "多くのクリーナーは「全部消す」ボタン一つです。だから怖くてオンにできない。VKT CleanMate は、まず何が動くのかを提示し、信頼したサイトには触れず、時間がどこへ消えているかまで教えます。",
+    "hero.cta1": "VKT CleanMate を入手", "hero.cta2": "GitHub で見る",
+    "hero.meta": "無料の指定モード · アカウント不要 · 解析なし · すべてローカル",
+    "mock.scope": "対象範囲", "mock.scopeV": "クリーンリストのみ", "mock.sites": "対象サイト", "mock.hist": "履歴の件数",
+    "mock.cook": "Cookie", "mock.prot": "保護リスト該当", "mock.protV": "3 件スキップ", "mock.keep": "保持期間", "mock.keepV": "7 日",
+    "mock.btn": "12 サイトを削除", "mock.note": "確認するまで何も削除されません。",
+    "why.title": "一つの不安から設計しました", "why.sub": "「オンにしたら、全部ログアウトされるのでは？」",
+    "why.c1t": "まずプレビュー", "why.c1p": "削除のたびに要約から始まります。対象サイト数、消える履歴と Cookie の件数、適用される保持期間。",
+    "why.c2t": "既定は指定モード", "why.c2p": "触れるのはクリーンリストのドメインだけ。それ以外は範囲に入らないので、無料ユーザーに誤削除の道はありません。",
+    "why.c3t": "守るべきものは守る", "why.c3p": "全消去モードでは保護リストのドメインを丸ごと飛ばします。銀行、メール、ログインを保ちたいサイト。",
+    "feat.title": "実際にできること", "feat.sub": "九つのデータ種別、五つのトリガー、一文で説明できるドメイン規則。",
+    "feat.f1t": "九つのデータ種別", "feat.f1p": "履歴、キャッシュ、Cookie、ダウンロード履歴、フォームデータ、ローカルストレージ、IndexedDB、Service Worker、保存されたパスワード。各々独立したスイッチです。",
+    "feat.f2t": "五つのトリガー", "feat.f2p": "ブラウザ起動時、終了時、N 分ごと、毎日決まった時刻、N 分間アイドル後。",
+    "feat.f3t": "トリガーごとの範囲", "feat.f3p": "数時間ごとは履歴＋キャッシュだけ、ブラウザ終了時は深く削除。",
+    "feat.f4t": "保持期間", "feat.f4p": "直近 1 時間、3 日、7 日、30 日、またはすべて。",
+    "feat.f5t": "フォーカス足跡（Pro）", "feat.f5p": "開いたタブ数ではなく、実際に見ていた時間をドメインごとに。既定はオフで、専用ページを開いている間だけ記録します。",
+    "feat.f6t": "ショートカット", "feat.f6p": "Alt+Shift+C で今すぐ削除、Alt+Shift+X で削除してすべてのタブを閉じる。自動削除がオフでも使えます。",
+    "price.title": "無料と Pro", "price.sub": "無料版は意図的に全消去を実行できません。払わないことでデータを失う人はいません。",
+    "price.th1": "機能", "price.th2": "無料", "price.th3": "Pro",
+    "price.r1": "指定モード（クリーンリスト、無制限）", "price.r2": "手動＋スケジュール削除", "price.r3": "削除前のプレビュー",
+    "price.r4": "全消去モード（保護リスト以外）", "price.r5": "保護リスト", "price.r6": "フォーカス足跡と提案",
+    "price.r7": "足跡の CSV 書き出し",
+    "price.note": "ライセンス一本で二つのブラウザに対応。期限切れ後も無料機能は使えます。",
+    "pr.title": "プライバシーは設計から",
+    "pr.lead": "閲覧データが端末の外に出ることはありません。アカウントも解析もテレメトリもなく、外部への通信はキーを入力したときのライセンス検証だけです。",
+    "pr.p1": "何もアップロードしない", "pr.p2": "足跡は既定でオフ", "pr.p3": "保存は端末内のみ",
+    "pr.cta": "プライバシーポリシーを読む",
+    "pr.permTitle": "権限",
+    "pr.perm1": "選んだデータだけ削除", "pr.perm2": "設定と足跡", "pr.perm3": "スケジュール",
+    "pr.perm4": "現在のドメイン、最後のウィンドウ", "pr.perm5": "使用時にのみ要求", "pr.perm6": "ライセンスのみ",
+    "sup.title": "\ud83d\udc8c あなたへのメモ",
+    "sup.p1": "VKT CleanMate を使ってくださりありがとうございます。作った理由は、試したクリーナーがどれも、断りなく全部消すか、質問が多すぎて途中で諦めるかだったからです。",
+    "sup.p2": "匿名化ツールではなく、画面にもそう書いてあります。自分のブラウザのためのセルフサービスです。ヒヤッとする場面を一度でも減らせたなら、それが最高の報酬です。\u2615 をいただけたら嬉しいです。",
+    "sup.hint": "下のボタンからサポートページへ", "sup.btn": "支援する",
+    "honest.title": "VKT CleanMate にできないこと",
+    "honest.l1": "DNS キャッシュ、ルーターのログ、プロバイダの記録、サーバー側のログは消せません。",
+    "honest.l2": "削除した履歴は復元できません。ブラウザに履歴の書き込み API はありません。",
+    "honest.l3": "他のブラウザのデータ、別のプロファイル、他の端末に同期されたコピーは消せません。",
+    "honest.l4": "「ブラウザ終了時」はベストエフォートです。実行中に終了した場合、次回起動の数秒後に完了します。",
+    "honest.l5": "履歴、ダウンロード、フォームデータ、パスワードはサイト単位に絞れません。ブラウザが公開しておらず、画面にも明記しています。",
+    "honest.l6": "匿名化ツールでも監視対策ツールでもありません。自分のブラウザのためのセルフサービスツールです。",
+    "foot.copy": "© 2026 VKT CleanMate",
+    "foot.privacy": "プライバシー", "foot.site": "ウェブサイト", "foot.more": "他の拡張機能"
+  },
+  de: {
+    "title": "VKT CleanMate — Browserdaten löschen, aber erst ansehen",
+    "desc": "VKT CleanMate löscht Verlauf, Cache und Cookies nach Ihren Regeln. Sehen Sie vorher, was verschwindet, und lassen Sie vertraute Seiten unangetastet.",
+    "nav.features": "Funktionen", "nav.plans": "Gratis & Pro", "nav.privacy": "Datenschutz", "nav.support": "Unterstützen",
+    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "Erst sehen, was gelöscht wird —", "hero.h1b": "dann löschen.",
+    "hero.lead": "Die meisten Cleaner sind ein einziger „alles löschen“-Knopf. Genau deshalb traut sich kaum jemand, sie einzuschalten. VKT CleanMate zeigt Ihnen zuerst, was passiert, lässt vertraute Seiten unangetastet und sagt Ihnen, wohin Ihre Zeit geht.",
+    "hero.cta1": "VKT CleanMate holen", "hero.cta2": "Auf GitHub ansehen",
+    "hero.meta": "Kostenloser gezielter Modus · Kein Konto · Keine Telemetrie · Alles lokal",
+    "mock.scope": "Umfang", "mock.scopeV": "Nur Reinigungsliste", "mock.sites": "Gefundene Seiten", "mock.hist": "Verlaufseinträge",
+    "mock.cook": "Cookies", "mock.prot": "Schutz-Treffer", "mock.protV": "3 übersprungen", "mock.keep": "Behalten", "mock.keepV": "7 Tage",
+    "mock.btn": "12 Seiten reinigen", "mock.note": "Nichts wird entfernt, bevor Sie bestätigen.",
+    "why.title": "Rund um eine Angst gebaut", "why.sub": "„Meldet mich das überall ab, wenn ich es einschalte?“",
+    "why.c1t": "Erst die Vorschau", "why.c1p": "Jeder Lauf beginnt mit einer Zusammenfassung: wie viele Seiten betroffen sind, wie viele Verlaufseinträge und Cookies gehen, welches Aufbewahrungsfenster gilt.",
+    "why.c2t": "Gezielt als Standard", "why.c2p": "Berührt werden nur die Domains Ihrer Reinigungsliste. Alles andere ist nie im Umfang, ein kostenloser Nutzer kann also nichts versehentlich verlieren.",
+    "why.c3t": "Geschützt, wo es zählt", "why.c3p": "Im Vollmodus werden Ihre geschützten Domains komplett übersprungen — Bank, Mail, alles, wo Sie angemeldet bleiben wollen.",
+    "feat.title": "Was es tatsächlich tut", "feat.sub": "Neun Datentypen, fünf Auslöser und eine Domainregel, die in einen Satz passt.",
+    "feat.f1t": "Neun Datentypen", "feat.f1p": "Verlauf, Cache, Cookies, Downloads, Formulardaten, lokaler Speicher, IndexedDB, Service Worker und gespeicherte Passwörter — jeder einzeln schaltbar.",
+    "feat.f2t": "Fünf Auslöser", "feat.f2p": "Browserstart, Schließen, alle N Minuten, täglich zu fester Zeit, nach N Minuten Inaktivität.",
+    "feat.f3t": "Umfang pro Auslöser", "feat.f3p": "Alle paar Stunden nur Verlauf + Cache, beim Schließen ein gründlicher Lauf.",
+    "feat.f4t": "Aufbewahrung", "feat.f4p": "Letzte Stunde, 3, 7 oder 30 Tage behalten — oder alles.",
+    "feat.f5t": "Fokus-Fußabdruck (Pro)", "feat.f5p": "Tatsächlich angesehene Zeit pro Domain, nicht geöffnete Tabs. Standardmäßig aus, aufgezeichnet nur bei geöffneter Seite.",
+    "feat.f6t": "Tastenkombinationen", "feat.f6p": "Alt+Shift+C reinigt sofort, Alt+Shift+X reinigt und schließt alle Tabs. Beides wirkt auch bei ausgeschalteter Automatik.",
+    "price.title": "Gratis und Pro", "price.sub": "Die kostenlose Stufe kann bewusst nicht alles löschen — niemand verliert Daten, weil er nicht zahlt.",
+    "price.th1": "Funktion", "price.th2": "Gratis", "price.th3": "Pro",
+    "price.r1": "Gezielter Modus (Reinigungsliste, unbegrenzt)", "price.r2": "Manuell + geplant reinigen", "price.r3": "Vorschau vor dem Reinigen",
+    "price.r4": "Vollmodus (alles außer Schutzliste)", "price.r5": "Schutzliste", "price.r6": "Fokus-Fußabdruck + Vorschläge",
+    "price.r7": "CSV-Export des Fußabdrucks",
+    "price.note": "Eine Lizenz deckt zwei Browser, nach Ablauf laufen die kostenlosen Funktionen weiter.",
+    "pr.title": "Datenschutz by Design",
+    "pr.lead": "Ihre Browserdaten verlassen das Gerät nie. Kein Konto, keine Analyse, keine Telemetrie — die einzige ausgehende Anfrage ist die Lizenzprüfung, und nur wenn Sie einen Schlüssel eingeben.",
+    "pr.p1": "Nichts wird hochgeladen", "pr.p2": "Fußabdruck standardmäßig aus", "pr.p3": "Nur lokal gespeichert",
+    "pr.cta": "Datenschutzerklärung lesen",
+    "pr.permTitle": "Berechtigungen",
+    "pr.perm1": "nur Gewähltes löschen", "pr.perm2": "Einstellungen und Fußabdruck", "pr.perm3": "Zeitpläne",
+    "pr.perm4": "aktuelle Domain, letztes Fenster", "pr.perm5": "nur bei Nutzung angefragt", "pr.perm6": "nur Lizenz",
+    "sup.title": "\ud83d\udc8c Eine Notiz an Sie",
+    "sup.p1": "Danke, dass Sie VKT CleanMate nutzen. Ich habe es gebaut, weil jeder Cleaner, den ich probiert habe, entweder ohne Nachfrage alles löschte oder so viele Fragen stellte, dass ich aufgab.",
+    "sup.p2": "Es ist kein Anonymisierungswerkzeug, und das steht auch so in der Oberfläche. Es ist Selbstbedienung für den eigenen Browser. Wenn es Ihnen einen Schrecken erspart, ist das schon der beste Lohn \u2014 ein \u2615 würde meinen Tag machen.",
+    "sup.hint": "Klicken Sie unten, um zur Support-Seite zu gehen", "sup.btn": "Meine Arbeit unterstützen",
+    "honest.title": "Was VKT CleanMate nicht kann",
+    "honest.l1": "DNS-Caches, Router-Protokolle, Provider-Aufzeichnungen und serverseitige Logs bleiben unberührt.",
+    "honest.l2": "Gelöschten Verlauf kann es nicht wiederherstellen — der Browser hat keine API dafür.",
+    "honest.l3": "Andere Browser, andere Profile oder eine synchronisierte Kopie auf einem anderen Gerät werden nicht gereinigt.",
+    "honest.l4": "„Beim Schließen“ ist Best-Effort: Beendet sich der Browser mitten im Lauf, endet die Reinigung Sekunden nach dem nächsten Start.",
+    "honest.l5": "Verlauf, Downloads, Formulardaten und Passwörter lassen sich nicht auf eine Seite begrenzen — der Browser gibt das nicht her, und die Oberfläche sagt es.",
+    "honest.l6": "Es ist kein Anonymitäts- oder Überwachungsschutz-Werkzeug, sondern Selbstbedienung für den eigenen Browser.",
+    "foot.copy": "© 2026 VKT CleanMate",
+    "foot.privacy": "Datenschutz", "foot.site": "Website", "foot.more": "Weitere Erweiterungen"
+  },
+  es: {
+    "title": "VKT CleanMate — Limpia viendo antes qué se borra",
+    "desc": "VKT CleanMate limpia historial, caché y cookies según tus reglas. Ve qué desaparecerá antes de borrar y mantén intactos los sitios de confianza.",
+    "nav.features": "Funciones", "nav.plans": "Gratis y Pro", "nav.privacy": "Privacidad", "nav.support": "Apoyar",
+    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "Ve qué se va a borrar", "hero.h1b": "antes de borrarlo.",
+    "hero.lead": "Casi todos los limpiadores son un botón de «borrarlo todo», y por eso da miedo encenderlos. VKT CleanMate te enseña primero qué va a pasar, deja intactos los sitios de confianza y te dice en qué se va tu tiempo.",
+    "hero.cta1": "Obtener VKT CleanMate", "hero.cta2": "Ver en GitHub",
+    "hero.meta": "Modo dirigido gratis · Sin cuenta · Sin telemetría · Todo local",
+    "mock.scope": "Alcance", "mock.scopeV": "Solo lista de limpieza", "mock.sites": "Sitios encontrados", "mock.hist": "Entradas de historial",
+    "mock.cook": "Cookies", "mock.prot": "Coincidencias protegidas", "mock.protV": "3 omitidos", "mock.keep": "Conservar", "mock.keepV": "7 días",
+    "mock.btn": "Limpiar 12 sitios", "mock.note": "No se borra nada hasta que confirmes.",
+    "why.title": "Diseñado alrededor de un miedo", "why.sub": "«Si lo activo, ¿me desconectará de todo?»",
+    "why.c1t": "Primero la vista previa", "why.c1p": "Cada limpieza empieza con un resumen: cuántos sitios coinciden, cuántas entradas de historial y cookies se van, y qué ventana de conservación se aplica.",
+    "why.c2t": "Dirigido por defecto", "why.c2p": "Solo se tocan los dominios de tu lista. El resto nunca entra en el alcance, así que un usuario gratuito no puede perder datos por accidente.",
+    "why.c3t": "Protegido donde importa", "why.c3p": "En modo completo tus dominios protegidos se omiten por completo: bancos, correo, lo que quieras mantener conectado.",
+    "feat.title": "Lo que hace de verdad", "feat.sub": "Nueve tipos de datos, cinco disparadores y una regla de dominios que cabe en una frase.",
+    "feat.f1t": "Nueve tipos de datos", "feat.f1p": "Historial, caché, cookies, descargas, datos de formularios, almacenamiento local, IndexedDB, service workers y contraseñas guardadas, cada uno con su interruptor.",
+    "feat.f2t": "Cinco disparadores", "feat.f2p": "Al arrancar, al cerrar, cada N minutos, a diario a una hora fija, tras N minutos inactivo.",
+    "feat.f3t": "Alcance por disparador", "feat.f3p": "Solo historial + caché cada pocas horas, limpieza profunda al cerrar el navegador.",
+    "feat.f4t": "Conservación", "feat.f4p": "Mantener la última hora, 3, 7 o 30 días, o todo.",
+    "feat.f5t": "Huella de enfoque (Pro)", "feat.f5p": "Tiempo realmente visto por dominio, no pestañas abiertas. Desactivada por defecto y solo mide con su página abierta.",
+    "feat.f6t": "Atajos", "feat.f6p": "Alt+Shift+C limpia ahora, Alt+Shift+X limpia y cierra todas las pestañas. Funcionan con la limpieza automática apagada.",
+    "price.title": "Gratis y Pro", "price.sub": "La versión gratuita no puede hacer un borrado completo, a propósito: nadie pierde datos por no pagar.",
+    "price.th1": "Capacidad", "price.th2": "Gratis", "price.th3": "Pro",
+    "price.r1": "Modo dirigido (lista de limpieza, ilimitada)", "price.r2": "Limpieza manual + programada", "price.r3": "Vista previa antes de limpiar",
+    "price.r4": "Modo completo (todo menos lo protegido)", "price.r5": "Lista de protección", "price.r6": "Huella de enfoque + sugerencias",
+    "price.r7": "Exportación CSV de la huella",
+    "price.note": "Una licencia cubre dos navegadores y las funciones gratuitas siguen funcionando al caducar.",
+    "pr.title": "Privacidad desde el diseño",
+    "pr.lead": "Tus datos de navegación nunca salen del dispositivo. Sin cuenta, sin analítica y sin telemetría: la única petición saliente es la validación de licencia, y solo si introduces una clave.",
+    "pr.p1": "No se sube nada", "pr.p2": "Huella desactivada por defecto", "pr.p3": "Solo almacenamiento local",
+    "pr.cta": "Leer la política de privacidad",
+    "pr.permTitle": "Permisos",
+    "pr.perm1": "borrar solo lo elegido", "pr.perm2": "ajustes y huella", "pr.perm3": "programación",
+    "pr.perm4": "dominio actual, última ventana", "pr.perm5": "solo al usarse", "pr.perm6": "solo licencia",
+    "sup.title": "\ud83d\udc8c Una nota para ti",
+    "sup.p1": "Gracias por usar VKT CleanMate. Lo hice porque todos los limpiadores que probé o borraban todo sin preguntar, o preguntaban tanto que acababa rindiéndome.",
+    "sup.p2": "No es una herramienta de anonimato y la interfaz lo dice claro. Es un servicio de autolimpieza para tu propio navegador. Si te ahorra un susto, ya es la mejor recompensa: un \u2615 me alegraría el día.",
+    "sup.hint": "Pulsa abajo para ir a la página de apoyo", "sup.btn": "Apoyar mi trabajo",
+    "honest.title": "Lo que VKT CleanMate no puede hacer",
+    "honest.l1": "No borra cachés DNS, registros del router, registros del proveedor ni logs del servidor.",
+    "honest.l2": "No restaura el historial borrado: el navegador no ofrece API para escribirlo.",
+    "honest.l3": "No limpia otros navegadores, otros perfiles ni una copia sincronizada en otro dispositivo.",
+    "honest.l4": "«Al cerrar el navegador» es un mejor esfuerzo: si se cierra a mitad, la limpieza acaba segundos después del siguiente arranque.",
+    "honest.l5": "No limita historial, descargas, datos de formularios ni contraseñas a un solo sitio: el navegador no lo expone y la interfaz lo dice.",
+    "honest.l6": "No es una herramienta de anonimato ni antisorveillance: es autoservicio para tu propio navegador.",
+    "foot.copy": "© 2026 VKT CleanMate",
+    "foot.privacy": "Privacidad", "foot.site": "Sitio web", "foot.more": "Más extensiones"
+  },
+  fr: {
+    "title": "VKT CleanMate — Voir avant de nettoyer",
+    "desc": "VKT CleanMate efface historique, cache et cookies selon vos règles. Voyez ce qui sera supprimé avant de le supprimer et gardez vos sites de confiance intacts.",
+    "nav.features": "Fonctions", "nav.plans": "Gratuit et Pro", "nav.privacy": "Confidentialité", "nav.support": "Soutenir",
+    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "Voir ce qui va être supprimé", "hero.h1b": "avant de le supprimer.",
+    "hero.lead": "La plupart des nettoyeurs sont un gros bouton « tout effacer », et c’est bien pour cela qu’on n’ose pas les activer. VKT CleanMate montre d’abord ce qui va se passer, laisse vos sites de confiance intacts et vous dit où passe votre temps.",
+    "hero.cta1": "Obtenir VKT CleanMate", "hero.cta2": "Voir sur GitHub",
+    "hero.meta": "Mode ciblé gratuit · Sans compte · Sans télémétrie · Tout en local",
+    "mock.scope": "Portée", "mock.scopeV": "Liste de nettoyage seule", "mock.sites": "Sites trouvés", "mock.hist": "Entrées d’historique",
+    "mock.cook": "Cookies", "mock.prot": "Hits protégés", "mock.protV": "3 ignorés", "mock.keep": "Conserver", "mock.keepV": "7 jours",
+    "mock.btn": "Nettoyer 12 sites", "mock.note": "Rien n’est supprimé avant votre confirmation.",
+    "why.title": "Construit autour d’une peur", "why.sub": "« Si je l’active, vais-je être déconnecté partout ? »",
+    "why.c1t": "L’aperçu d’abord", "why.c1p": "Chaque nettoyage commence par un résumé : combien de sites correspondent, combien d’entrées d’historique et de cookies partent, et quelle fenêtre de conservation s’applique.",
+    "why.c2t": "Ciblé par défaut", "why.c2p": "Seuls les domaines de votre liste sont touchés. Le reste n’entre jamais dans la portée : un utilisateur gratuit ne peut pas perdre de données par accident.",
+    "why.c3t": "Protégé là où ça compte", "why.c3p": "En mode complet, vos domaines protégés sont entièrement ignorés : banque, mail, tout ce où vous voulez rester connecté.",
+    "feat.title": "Ce qu’il fait vraiment", "feat.sub": "Neuf types de données, cinq déclencheurs et une règle de domaines qui tient en une phrase.",
+    "feat.f1t": "Neuf types de données", "feat.f1p": "Historique, cache, cookies, téléchargements, données de formulaires, stockage local, IndexedDB, service workers et mots de passe enregistrés, chacun activable.",
+    "feat.f2t": "Cinq déclencheurs", "feat.f2p": "Au démarrage, à la fermeture, toutes les N minutes, chaque jour à heure fixe, après N minutes d’inactivité.",
+    "feat.f3t": "Portée par déclencheur", "feat.f3p": "Historique + cache seulement toutes les quelques heures, nettoyage profond à la fermeture.",
+    "feat.f4t": "Conservation", "feat.f4p": "Garder la dernière heure, 3, 7 ou 30 jours — ou tout.",
+    "feat.f5t": "Empreinte de concentration (Pro)", "feat.f5p": "Le temps réellement regardé par domaine, pas les onglets ouverts. Désactivée par défaut, et seulement quand sa page est ouverte.",
+    "feat.f6t": "Raccourcis", "feat.f6p": "Alt+Shift+C nettoie maintenant, Alt+Shift+X nettoie et ferme tous les onglets. Les deux marchent même sans nettoyage auto.",
+    "price.title": "Gratuit et Pro", "price.sub": "La version gratuite ne peut délibérément pas tout effacer : personne ne perd de données faute de payer.",
+    "price.th1": "Capacité", "price.th2": "Gratuit", "price.th3": "Pro",
+    "price.r1": "Mode ciblé (liste de nettoyage, illimitée)", "price.r2": "Nettoyage manuel + planifié", "price.r3": "Aperçu avant nettoyage",
+    "price.r4": "Mode complet (tout sauf la protection)", "price.r5": "Liste de protection", "price.r6": "Empreinte de concentration + suggestions",
+    "price.r7": "Export CSV de l’empreinte",
+    "price.note": "Une licence couvre deux navigateurs, et les fonctions gratuites continuent après expiration.",
+    "pr.title": "Confidentiel par conception",
+    "pr.lead": "Vos données de navigation ne quittent jamais l’appareil. Pas de compte, pas d’analytique, pas de télémétrie : la seule requête sortante est la vérification de licence, et seulement si vous saisissez une clé.",
+    "pr.p1": "Rien n’est envoyé", "pr.p2": "Empreinte désactivée par défaut", "pr.p3": "Stockage local uniquement",
+    "pr.cta": "Lire la politique de confidentialité",
+    "pr.permTitle": "Autorisations",
+    "pr.perm1": "supprimer le choix seul", "pr.perm2": "réglages et empreinte", "pr.perm3": "planifications",
+    "pr.perm4": "domaine courant, dernière fenêtre", "pr.perm5": "demandées à l’usage", "pr.perm6": "licence uniquement",
+    "sup.title": "\ud83d\udc8c Un mot pour vous",
+    "sup.p1": "Merci d’utiliser VKT CleanMate. Je l’ai écrit parce que tous les nettoyeurs que j’ai essayés effaçaient tout sans demander, ou posaient tant de questions que j’abandonnais.",
+    "sup.p2": "Ce n’est pas un outil d’anonymat, et l’interface le dit clairement. C’est du libre-service pour votre propre navigateur. S’il vous évite une frayeur, c’est déjà la meilleure récompense \u2014 un \u2615 me ferait très plaisir.",
+    "sup.hint": "Cliquez ci-dessous pour la page de soutien", "sup.btn": "Soutenir mon travail",
+    "honest.title": "Ce que VKT CleanMate ne sait pas faire",
+    "honest.l1": "Il ne vide pas les caches DNS, les journaux du routeur, les enregistrements du fournisseur ni les logs serveur.",
+    "honest.l2": "Il ne restaure pas l’historique supprimé : le navigateur n’offre aucune API pour l’écrire.",
+    "honest.l3": "Il ne nettoie pas les autres navigateurs, les autres profils, ni une copie synchronisée ailleurs.",
+    "honest.l4": "« À la fermeture » est du meilleur effort : si le navigateur quitte en pleine tâche, le nettoyage finit quelques secondes après le démarrage suivant.",
+    "honest.l5": "Il ne limite pas l’historique, les téléchargements, les formulaires ou les mots de passe à un seul site : le navigateur ne l’expose pas, et l’interface le dit.",
+    "honest.l6": "Ce n’est ni un outil d’anonymat ni un anti-surveillance, mais du libre-service pour votre propre navigateur.",
+    "foot.copy": "© 2026 VKT CleanMate",
+    "foot.privacy": "Confidentialité", "foot.site": "Site web", "foot.more": "Plus d’extensions"
+  }
+};
+
+const ORDER = ['en', 'zh_CN', 'ja', 'de', 'es', 'fr'];const LABEL = { en: 'EN', zh_CN: '中文', ja: '日本語', de: 'DE', es: 'ES', fr: 'FR' };
+
+function pickLang() {
+  const q = new URLSearchParams(location.search).get('lang');
+  if (q && LANGS[q]) return q;
+  const saved = localStorage.getItem('cleanmate_lang');
+  if (saved && LANGS[saved]) return saved;
+  const nav = (navigator.language || 'en').replace('-', '_');
+  if (LANGS[nav]) return nav;
+  const short = nav.split('_')[0];
+  if (LANGS[short]) return short;
+  if (short === 'zh') return 'zh_CN';
+  return 'en';
+}
+
+function apply(lang) {
+  const d = LANGS[lang];
+  document.querySelectorAll('[data-i]').forEach((el) => {
+    const v = d[el.dataset.i];
+    if (v) el.textContent = v;
+  });
+  document.title = d['title'];
+  const meta = document.querySelector('meta[name="description"]');
+  if (meta) meta.setAttribute('content', d['desc']);
+  document.documentElement.lang = lang === 'zh_CN' ? 'zh-CN' : lang;
+  document.querySelectorAll('#langs button').forEach((b) => {
+    b.classList.toggle('on', b.dataset.lang === lang);
+  });
+  try { localStorage.setItem('cleenmate_lang', lang); } catch (e) {}
+  location.hash && setTimeout(() => {
+    const t = document.querySelector(location.hash);
+    if (t) t.scrollIntoView();
+  }, 0);
+}
+
+(function () {
+  const box = document.getElementById('langs');
+  ORDER.forEach((code) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = LABEL[code];
+    b.dataset.lang = code;
+    b.addEventListener('click', () => apply(code));
+    box.append(b);
+  });
+  apply(pickLang());
+})();
+</script>
+</body>
+</html>
