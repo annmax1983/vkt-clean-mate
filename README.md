@@ -4,7 +4,7 @@ English | [中文](languages/README_zh.md) | [日本語](languages/README_ja.md)
 
 **Preview-first browsing data cleaner.** See exactly what will be deleted before it is deleted, keep the domains you trust untouched, and find out where your focus time actually goes.
 
-> Chrome · Edge · Manifest V3 · Minimal permissions · Local only
+> Chrome · Edge · Firefox · Manifest V3 · Minimal permissions · Local only
 
 Part of the [VKT](https://www.annmax1983.com/) privacy-first toolkit.
 
@@ -16,7 +16,7 @@ Most cleaners are one big "wipe everything" button. That is exactly why people a
 
 VKT CleanMate separates the decision from the action:
 
-1. **Preview before deleting** — a summary of what will be removed (site count, history entries, cookies, data types, retention) is always shown first.
+1. **Preview before deleting** — a summary of what will be removed (site count, history entries, cookies, data types, retention) is shown before each manual run; scheduled runs follow your rules and notify you when done.
 2. **Targeted mode is free** — only the domains on your clean list are wiped. Everything else is never touched, so a free user has no way to lose data by accident.
 3. **Protected list** — in Full mode the domains you protect are skipped, so you stay signed in where it matters.
 4. **Focus footprint** — tracks how long you actually *watch* a site (not how many tabs you opened), then tells you which domains are worth cleaning. It exists to feed the cleaner, not to be a second product.
@@ -29,9 +29,9 @@ VKT CleanMate separates the decision from the action:
 
 | What VKT CleanMate does | The result |
 |---|---|
-| **Preview sheet on every run** | Real counts from the browser: sites found, history entries, cookies, active data types, retention window |
+| **Preview sheet on every manual run** | Real counts from the browser: sites found, history entries, cookies, active data types, retention window |
 | **Free tier cannot run a full wipe** | A free user has no path to accidental data loss — by design, not by warning |
-| **Two lists pointing in opposite directions** | Clean list ("only these", free) and protected list ("never these", paid) |
+| **Two lists pointing in opposite directions** | Clean list ("only these") and protected list ("never these") — both free, and protection wins in either mode |
 | **Honest limits written down** | In the interface and in this README, rather than discovered by a reviewer |
 
 ---
@@ -44,13 +44,17 @@ VKT CleanMate separates the decision from the action:
 |---|---|
 | Preview sheet | Sites found, history entries, cookies, data types and retention, before anything is removed |
 | Targeted mode | Cleans only the domains on your clean list. Unlimited entries |
+| Protected list | Domains that are never touched. Protection wins over the clean list, in both modes |
 | Nine data types | History, cache, cookies, download history, form data, local storage, IndexedDB, service workers, saved passwords — each a separate switch |
-| Retention | Keep the last 1 hour / 3 days / 7 days / 30 days, or everything |
+| Retention | Keep the last 1 day / 3 days / 7 days / 30 days, or everything |
 | Five triggers | On startup, on browser close, every N minutes, daily at a chosen time, after N minutes idle |
 | Per-trigger scope | e.g. history + cache every few hours, a deep clean including cookies when the browser closes |
 | Shortcuts | `Alt+Shift+C` clean now · `Alt+Shift+X` clean + close all tabs |
 | Snooze | Push the next automatic run back by one hour |
 | Notifications | A result summary after every run |
+| Run log | The last 12 runs with time, trigger, sites and entries removed |
+| Right-click actions | Add the current site to the clean list, protect it, or open the preview for it |
+| Focus footprint | Real focus time per domain, 24-hour histogram, ranking, "worth cleaning" suggestions, CSV export — recording starts while the footprint page is open |
 | Six languages | English, 简体中文, 日本語, Deutsch, Español, Français |
 
 ### ⭐ Pro (licence required)
@@ -58,9 +62,8 @@ VKT CleanMate separates the decision from the action:
 | Feature | What it does |
 |---|---|
 | Full mode | Clean everything except your protected list |
-| Protected list | The domains that must never be touched; protection wins over the clean list |
-| Focus footprint | Real focus time per domain, 24-hour histogram, ranking, "worth cleaning" suggestions |
-| CSV export | The footprint as a CSV, one row per domain |
+| Background recording | Keep collecting focus time after the footprint page is closed, instead of only while it is open |
+| 30-day trend | Daily focus time for the last 30 days, plus this week against last week |
 
 A licence covers two browsers. The free features keep working after a licence expires.
 
@@ -109,7 +112,7 @@ A licence covers two browsers. The free features keep working after a licence ex
 | Chrome 116+ (desktop) | ✅ Supported |
 | Microsoft Edge 116+ (desktop) | ✅ Supported |
 | Chromium-based browsers with MV3 | ✅ Should work |
-| Firefox | ❌ Not supported, and not planned |
+| Firefox (desktop) | ✅ Supported |
 | Mobile / tablet | ❌ Not supported — there is no toolbar to click |
 | Private windows | ⚠️ Nothing to clean: data is discarded when the window closes |
 
@@ -117,7 +120,13 @@ A licence covers two browsers. The free features keep working after a licence ex
 
 ## Install
 
-**From the store:** Chrome Web Store or Microsoft Edge Add-ons → "Add to Chrome" → pin the icon to the toolbar.
+| Store | Link |
+|---|---|
+| Chrome Web Store | — not published yet (use Edge or Firefox) |
+| Microsoft Edge Add-ons | [Install for Edge](https://microsoftedge.microsoft.com/addons/detail/amfipoeaanhnmhhcfcfdngffnhmgjjfb) |
+| Firefox Add-ons (AMO) | [Install for Firefox](https://addons.mozilla.org/firefox/addon/vkt-cleanmate/) |
+
+> Install only from the official stores above — avoid third-party download sites.
 
 **From source:**
 
@@ -140,7 +149,7 @@ Open the popup and press **Clean now**. Because the default mode is Targeted and
 
 - In the popup: **Add current site** adds the domain you are looking at.
 - On the Lists tab: type `example.com` and press Add. Subdomains are covered automatically; `www.` is stripped for you.
-- On the Footprint page (Pro): the "worth cleaning" suggestions and the ranking rows both have a button that adds the domain.
+- On the Footprint page: the "worth cleaning" suggestions and the ranking rows both have a button that adds the domain.
 
 ### Configuring automatic runs
 
@@ -163,8 +172,8 @@ Both can be rebound at `chrome://extensions/shortcuts`.
 
 1. A trigger fires, or you press Clean now.
 2. The background service worker resolves the domain scope: your clean list in Targeted mode, everything minus the protected list in Full mode.
-3. It counts what would be affected — sites, history entries, cookies — and shows the preview sheet. **Nothing is deleted yet.**
-4. On confirm, each selected data type is removed through `chrome.browsingData`, in batches of at most 50 origins.
+3. On a manual run it counts what would be affected — sites, history entries, cookies — and shows the preview sheet before touching anything. **Nothing is deleted until you confirm.**
+4. On confirm, each selected data type is removed through `chrome.browsingData`, in batches of at most 50 origins. A scheduled run (interval, daily, idle, on-close) skips the sheet — it executes the rules you configured and reports the result by notification.
 5. Domain rules are expanded to real origins first — `browsingData` accepts origins (`https://example.com`) rather than bare hosts, and does not expand subdomains itself.
 6. A notification reports the result, the last-run timestamp is stored, and the sheet stays reachable from the popup.
 
@@ -195,8 +204,8 @@ It is best-effort. The extension fires when the window count reaches zero, and i
 **Does it clean other browsers or other profiles?**
 No. One profile, one browser, this device.
 
-**Why is the protected list paid?**
-Because the free tier deliberately cannot run a full wipe. "Wipe everything" is the risky operation, and it is the one that comes with a safety net attached.
+**Why is only Full mode paid?**
+Because a full wipe is the one operation that can remove logins you still need. It is also the only thing a targeted cleaner structurally cannot do — everything else here, including the protected list and the footprint data, works without a licence. Pro adds the risky operation and the long-term recording, not the ability to look at your own data.
 
 ---
 
@@ -217,6 +226,7 @@ No analytics, no telemetry, no ads, no account. The extension does not read page
 | `windows` | Detect the last window closing — the "on browser close" trigger |
 | `idle` | The optional "after idle" trigger |
 | `notifications` | The result summary after a run |
+| `contextMenus` | The right-click entries: add to the clean list, protect this site, preview this site |
 | `history` *(optional)* | Only requested when you preview or clean history per site |
 | `cookies` *(optional)* | Only requested when you clean cookies per site |
 | `api.annmax1983.com` | Licence activation and validation only |
@@ -246,8 +256,8 @@ license.js             Creem licence (plugin id: cleanmate)
 common/                store (defaults/merge), domain matching, i18n, formatters, ui.css
 popup/                 one-click clean + preview sheet + current-site actions
 options/               mode, data types, triggers, lists, footprint switch, licence
-insights/              Footprint page — Pro only; collection runs while this page is open
-_locales/              en, zh_CN, ja, de, es, fr (164 keys each)
+insights/              Footprint page — free to view; collection runs while this page is open (always-on is Pro)
+_locales/              en, zh_CN, ja, de, es, fr (174 keys each)
 languages/             translated READMEs (zh, ja, de, es, fr)
 assets/                shared UI icons (GitHub / coffee / favicon)
 store-listing/         store copy for all six languages
@@ -286,30 +296,32 @@ capture of `index.html` and is not a store asset.
 
 ### Notes on the focus tracker
 
-- Off by default, and part of the paid tier.
-- Default mode records **only while the Footprint page is open** (a long-lived port keeps it alive). Closing the page stops recording.
-- The service worker cannot use `setInterval` — sessions are committed on tab/window events and flushed by a 1-minute alarm.
+- Off by default. Viewing the footprint, the ranking, the suggestions and the CSV export are free; background recording and the 30-day trend are Pro.
+- Default mode records **only while the Footprint page is open** (a long-lived port keeps it alive). Closing the page stops recording. "Always" keeps it running in the background and is part of Pro.
+- The service worker cannot use `setInterval` — sessions are committed on tab/window events and flushed by a 1-minute alarm. A flush only writes the current block; the session continues, so a heartbeat never counts as a new visit.
+- Only counted while the tab is active **and** its window is focused and not minimised. Ten minutes without any input is treated as "away" and stops counting; a single block is capped at five minutes, so a sleep or a laptop lid closing cannot turn eight idle hours into eight hours of "focus".
 - Only `domain`, `duration`, `visits` and an hour histogram are stored. No URLs, no titles.
-- Free users get a licence card instead of the page, and no port is opened, so nothing is recorded.
+- A free user who never opens the page records nothing at all, and the daily trend is not sent to the page for them — the paid gate sits in the background, not in the DOM.
 
 ---
 
 ## 中文说明
 
-**在做的事**：一个"先看清再删"的浏览数据清理器。免费版只清「清理名单」里的域名，永远不会误伤其它数据；付费版才是"清全部 + 跳过保护名单"。
+**在做的事**：一个"先看清再删"的浏览数据清理器。免费版只清「清理名单」里的域名，永远不会误伤其它数据；付费版多一个"清全部"和长期记录。
 
 **核心差异**：
 1. 清理前必出预览（命中站点数、历史条数、Cookie 数、保留期）
-2. 「专注足迹」只统计你真正在看的时长，而不是开了多少标签页，并给出"该清哪个"的建议
-3. 统计默认关闭，且默认只在足迹页面打开时采集
+2. 「专注足迹」只统计你真正在看的时长，而不是开了多少标签页，并给出"该清哪个"的建议——数据、排行、建议和 CSV 都免费
+3. 统计默认关闭，且默认只在足迹页面打开时采集；付费买的是"关掉页面继续记录"和 30 天趋势
+4. 保护名单免费，且两种模式下都生效（保护优先于清理）
 
-**故意的取舍**：不做正则规则、不做锁屏触发、不做 Firefox。
+**故意的取舍**：不做正则规则、不做锁屏触发。
 
 ---
 
 ## Copyright Disclaimer
 
-VKT CleanMate is an independent tool. It is not affiliated with Google, Microsoft or any browser vendor. Chrome and Edge are trademarks of their respective owners.
+VKT CleanMate is an independent tool. It is not affiliated with Google, Microsoft or any browser vendor. Chrome, Edge and Firefox are trademarks of their respective owners.
 
 The extension deletes data through the browser's own APIs. It does not patch the browser, does not modify system files and does not install anything outside its own extension folder.
 
@@ -330,3 +342,13 @@ The published package contains readable JavaScript — no obfuscation. `dist/` i
 ## License
 
 Copyright © 2026 VKT CleanMate. All rights reserved.
+
+---
+
+## Links
+
+- **Official website:** https://annmax1983.com/
+- **This extension:** https://annmax1983.com/extensions/cleanmate
+- **Privacy policy:** https://annmax1983.com/privacy
+- **Contact:** support@annmax1983.com
+- **☕ Support this project (Ko-fi):** https://ko-fi.com/annmax?ref=vkt-clean-mate

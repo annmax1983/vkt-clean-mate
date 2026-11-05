@@ -4,7 +4,7 @@
 
 Voir ce qui va être supprimé avant de le supprimer. Les sites de confiance restent intacts, et au passage vous saurez où passe votre temps.
 
-> Chrome · Edge · Manifest V3 · Permissions minimales · 100 % local · Sans analytique
+> Chrome · Edge · Firefox · Manifest V3 · Permissions minimales · 100 % local · Sans analytique
 
 Fait partie de la boîte à outils de confidentialité [VKT](https://www.annmax1983.com/).
 
@@ -24,9 +24,9 @@ VKT CleanMate sépare la décision de l’action.
 
 | Ce que fait VKT CleanMate | Le résultat |
 |---|---|
-| **Une feuille d’aperçu à chaque exécution** | Des chiffres réels lus dans le navigateur : sites trouvés, entrées d’historique, cookies, types actifs, fenêtre de conservation |
+| **Une feuille d’aperçu à chaque exécution manuelle** | Des chiffres réels lus dans le navigateur : sites trouvés, entrées d’historique, cookies, types actifs, fenêtre de conservation |
 | **La version gratuite ne peut pas tout effacer** | Aucun chemin vers la suppression accidentelle — par conception, pas par avertissement |
-| **Deux listes en directions opposées** | Liste de nettoyage (« seulement ceux-là », gratuite) et liste de protection (« jamais ceux-là », payante) |
+| **Deux listes en directions opposées** | Liste de nettoyage (« seulement ceux-là », gratuite) et liste de protection (« jamais ceux-là », gratuite elle aussi, respectée dans les deux modes) |
 | **Les limites sont écrites** | Dans l’interface et dans ce README, plutôt que découvertes par un examinateur |
 
 En une phrase : **voir ce qui part avant de supprimer, et savoir ensuite où est passé le temps.**
@@ -42,7 +42,7 @@ En une phrase : **voir ce qui part avant de supprimer, et savoir ensuite où est
 | Aperçu | Sites trouvés, entrées d’historique, cookies, types de données et conservation avant toute suppression |
 | Mode ciblé | Ne nettoie que les domaines de votre liste de nettoyage. Entrées illimitées |
 | Neuf types de données | Historique, cache, cookies, historique des téléchargements, données de formulaires, stockage local, IndexedDB, service workers et mots de passe enregistrés, chacun avec son interrupteur |
-| Conservation | Garder la dernière heure / 3 jours / 7 jours / 30 jours, ou tout |
+| Conservation | Garder le dernier jour / 3 jours / 7 jours / 30 jours, ou tout |
 | Cinq déclencheurs | Au démarrage, à la fermeture, toutes les N minutes, chaque jour à une heure fixe, après N minutes d’inactivité |
 | Portée par déclencheur | Par exemple historique + cache toutes les quelques heures, nettoyage profond avec cookies à la fermeture |
 | Raccourcis | `Alt+Shift+C` nettoyer maintenant · `Alt+Shift+X` nettoyer puis fermer tous les onglets et fenêtres |
@@ -106,7 +106,7 @@ Une licence couvre deux navigateurs. Les fonctions gratuites continuent de fonct
 | Chrome 116+ (bureau) | ✅ Compatible |
 | Microsoft Edge 116+ (bureau) | ✅ Compatible |
 | Autres navigateurs Chromium avec MV3 | ✅ Devrait fonctionner |
-| Firefox | ❌ Non compatible, et non prévu |
+| Firefox (bureau) | ✅ Compatible |
 | Mobile / tablette | ❌ Non compatible : il n’y a pas de barre d’outils |
 | Fenêtres privées | ⚠️ Rien à nettoyer : les données sont jetées à la fermeture |
 
@@ -114,7 +114,7 @@ Une licence couvre deux navigateurs. Les fonctions gratuites continuent de fonct
 
 ## Installation
 
-**Depuis la boutique :** Chrome Web Store ou Microsoft Edge Add-ons → « Ajouter à Chrome » → épinglez l’icône dans la barre d’outils.
+**Depuis la boutique :** Chrome Web Store, Microsoft Edge Add-ons ou Firefox Add-ons (AMO) → « Ajouter à Chrome » → épinglez l’icône dans la barre d’outils.
 
 **Depuis les sources :**
 
@@ -160,8 +160,8 @@ Les deux se modifient dans `chrome://extensions/shortcuts`.
 
 1. Un déclencheur se met en route, ou vous cliquez sur Nettoyer maintenant.
 2. Le service worker d’arrière-plan détermine la portée : votre liste de nettoyage en mode ciblé, tout moins la liste de protection en mode complet.
-3. Il compte ce qui serait touché — sites, entrées d’historique, cookies — et affiche la feuille d’aperçu. **Rien n’a encore été supprimé.**
-4. Après validation, chaque type sélectionné est supprimé via `chrome.browsingData`, par lots de 50 origines au maximum.
+3. Lors d’une exécution manuelle, il compte ce qui serait touché — sites, entrées d’historique, cookies — et affiche la feuille d’aperçu. **Rien n’a encore été supprimé.**
+4. Après validation, chaque type sélectionné est supprimé via `chrome.browsingData`, par lots de 50 origines au maximum. Une exécution programmée (intervalle, quotidienne, inactivité, à la fermeture) saute la feuille : elle applique vos règles et notifie le résultat.
 5. Les règles de domaine sont d’abord converties en origines réelles : `browsingData` accepte des origines (`https://example.com`) et non des noms d’hôtes nus, et n’étend pas les sous-domaines de lui-même.
 6. Une notification rend compte du résultat, l’horodatage de l’exécution est enregistré, et la feuille reste accessible depuis le panneau.
 
@@ -192,8 +192,8 @@ C’est du meilleur effort. Il se déclenche quand le nombre de fenêtres attein
 **Nettoie-t-il d’autres navigateurs ou d’autres profils ?**
 Non. Un profil, un navigateur, cet appareil.
 
-**Pourquoi la liste de protection est-elle payante ?**
-Parce que la version gratuite ne peut délibérément pas lancer d’effacement complet. « Tout effacer » est l’opération risquée, et elle vient avec un filet de sécurité.
+**Pourquoi seul le mode complet est-il payant ?**
+Parce que « tout effacer » est la seule opération capable de supprimer des sessions dont vous avez encore besoin, et la seule qu’un nettoyeur ciblé ne peut structurellement pas faire. Tout le reste — la liste de protection comme l’empreinte de focus — fonctionne sans licence. Pro vend l’opération risquée et l’enregistrement au long cours, pas le droit de regarder ses propres données.
 
 ---
 
@@ -243,8 +243,8 @@ license.js             licence Creem (plugin id: cleanmate)
 common/                store (valeurs par défaut/fusion), correspondance de domaines, i18n, formats, ui.css
 popup/                 nettoyage en un clic + feuille d’aperçu + actions sur le site courant
 options/               mode, types de données, déclencheurs, listes, interrupteur d’empreinte, licence
-insights/              page d’empreinte — Pro uniquement ; mesure tant que la page est ouverte
-_locales/              en, zh_CN, ja, de, es, fr (164 clés chacun)
+insights/              page d’empreinte — consultation gratuite ; mesure tant que la page est ouverte (mesure permanente : Pro)
+_locales/              en, zh_CN, ja, de, es, fr (174 clés chacun)
 languages/             READMEs traduits
 assets/                icônes d’interface partagées
 store-listing/         textes de boutique en six langues
@@ -269,7 +269,7 @@ tools/harness/         chrome.* simulé et une page factice, réservés à tools
 
 ## Mention de copyright
 
-VKT CleanMate est un outil indépendant. Il n’est affilié ni à Google, ni à Microsoft, ni à aucun éditeur de navigateur. Chrome et Edge sont des marques de leurs propriétaires respectifs.
+VKT CleanMate est un outil indépendant. Il n’est affilié ni à Google, ni à Microsoft, ni à aucun éditeur de navigateur. Chrome, Edge et Firefox sont des marques de leurs propriétaires respectifs.
 
 L’extension supprime des données via les API du navigateur lui-même. Elle ne modifie pas le navigateur, ne touche pas aux fichiers système et n’installe rien en dehors de son propre dossier.
 

@@ -4,7 +4,7 @@
 
 Erst sehen, was gelöscht wird — dann löschen. Vertraute Seiten bleiben unangetastet, und Sie erfahren nebenbei, wohin Ihre Zeit tatsächlich geht.
 
-> Chrome · Edge · Manifest V3 · Minimale Berechtigungen · Nur lokal · Keine Analyse
+> Chrome · Edge · Firefox · Manifest V3 · Minimale Berechtigungen · Nur lokal · Keine Analyse
 
 Teil der [VKT](https://www.annmax1983.com/) Datenschutz-Toolbox.
 
@@ -24,9 +24,9 @@ VKT CleanMate trennt die Entscheidung von der Ausführung.
 
 | Was VKT CleanMate tut | Das Ergebnis |
 |---|---|
-| **Vorschau bei jedem Lauf** | Echte Zahlen aus dem Browser: gefundene Seiten, Verlaufseinträge, Cookies, aktive Datentypen, Aufbewahrungsfenster |
+| **Vorschau bei jedem manuellen Lauf** | Echte Zahlen aus dem Browser: gefundene Seiten, Verlaufseinträge, Cookies, aktive Datentypen, Aufbewahrungsfenster |
 | **Die kostenlose Stufe kann nicht alles löschen** | Für kostenlose Nutzer gibt es keinen Weg zum versehentlichen Datenverlust — als Design, nicht als Warnung |
-| **Zwei Listen in entgegengesetzte Richtungen** | Reinigungsliste („nur diese", kostenlos) und Schutzliste („niemals diese", bezahlt) |
+| **Zwei Listen in entgegengesetzte Richtungen** | Reinigungsliste („nur diese", kostenlos) und Schutzliste („niemals diese", ebenfalls kostenlos und in beiden Modi wirksam) |
 | **Grenzen werden aufgeschrieben** | In der Oberfläche und in dieser README, statt von einem Reviewer entdeckt zu werden |
 
 In einem Satz: **vor dem Löschen sehen, was verschwindet — nach dem Löschen wissen, wohin die Zeit ging.**
@@ -39,10 +39,10 @@ In einem Satz: **vor dem Löschen sehen, was verschwindet — nach dem Löschen 
 
 | Funktion | Was sie tut |
 |---|---|
-| Vorschau | Gefundene Seiten, Verlaufseinträge, Cookies, Datentypen und Aufbewahrung vor jedem Lauf |
+| Vorschau | Gefundene Seiten, Verlaufseinträge, Cookies, Datentypen und Aufbewahrung vor jedem manuellen Lauf |
 | Gezielter Modus | Löscht nur die Domains Ihrer Reinigungsliste. Unbegrenzt viele Einträge |
 | Neun Datentypen | Verlauf, Cache, Cookies, Downloadverlauf, Formulardaten, lokaler Speicher, IndexedDB, Service Worker, gespeicherte Passwörter — je ein eigener Schalter |
-| Aufbewahrung | Letzte 1 Stunde / 3 Tage / 7 Tage / 30 Tage behalten oder alles |
+| Aufbewahrung | Letzten Tag / 3 Tage / 7 Tage / 30 Tage behalten oder alles |
 | Fünf Auslöser | Beim Start, beim Schließen, alle N Minuten, täglich zu fester Zeit, nach N Minuten Inaktivität |
 | Umfang pro Auslöser | z. B. alle paar Stunden Verlauf + Cache, beim Schließen ein gründlicher Lauf inklusive Cookies |
 | Tastenkombinationen | `Alt+Shift+C` jetzt reinigen · `Alt+Shift+X` reinigen und alle Tabs und Fenster schließen |
@@ -106,7 +106,7 @@ Eine Lizenz deckt zwei Browser ab. Nach Ablauf einer Lizenz laufen die kostenlos
 | Chrome 116+ (Desktop) | ✅ Unterstützt |
 | Microsoft Edge 116+ (Desktop) | ✅ Unterstützt |
 | Andere Chromium-Browser mit MV3 | ✅ Sollte funktionieren |
-| Firefox | ❌ Nicht unterstützt, nicht geplant |
+| Firefox (Desktop) | ✅ Unterstützt |
 | Handy / Tablet | ❌ Nicht unterstützt — dort gibt es keine Toolbar |
 | Private Fenster | ⚠️ Nichts zu löschen: Die Daten werden beim Schließen verworfen |
 
@@ -114,7 +114,7 @@ Eine Lizenz deckt zwei Browser ab. Nach Ablauf einer Lizenz laufen die kostenlos
 
 ## Installation
 
-**Aus dem Store:** Chrome Web Store oder Microsoft Edge Add-ons → „Zu Chrome hinzufügen" → Symbol in der Toolbar anheften.
+**Aus dem Store:** Chrome Web Store, Microsoft Edge Add-ons oder Firefox Add-ons (AMO) → „Zu Chrome hinzufügen" → Symbol in der Toolbar anheften.
 
 **Aus dem Quellcode:**
 
@@ -160,8 +160,8 @@ Beide lassen sich unter `chrome://extensions/shortcuts` ändern.
 
 1. Ein Auslöser greift, oder Sie drücken Jetzt reinigen.
 2. Der Service Worker im Hintergrund bestimmt den Domainumfang: Ihre Reinigungsliste im gezielten Modus, alles minus Schutzliste im Vollmodus.
-3. Er zählt, was betroffen wäre — Seiten, Verlaufseinträge, Cookies — und zeigt das Vorschau-Blatt. **Bisher wurde nichts gelöscht.**
-4. Nach der Bestätigung wird jeder gewählte Datentyp über `chrome.browsingData` entfernt, in Stapeln von höchstens 50 Origins.
+3. Bei einem manuellen Lauf zählt er, was betroffen wäre — Seiten, Verlaufseinträge, Cookies — und zeigt das Vorschau-Blatt. **Bisher wurde nichts gelöscht.**
+4. Nach der Bestätigung wird jeder gewählte Datentyp über `chrome.browsingData` entfernt, in Stapeln von höchstens 50 Origins. Ein geplanter Lauf (Intervall, täglich, im Leerlauf, beim Schließen) lässt das Blatt weg: er führt Ihre Regeln aus und meldet das Ergebnis per Benachrichtigung.
 5. Die Domainregeln werden zuerst in echte Origins aufgelöst — `browsingData` akzeptiert Origins (`https://example.com`) statt nackter Hostnamen und expandiert Subdomains nicht selbst.
 6. Eine Benachrichtigung meldet das Ergebnis, der Zeitstempel des Laufs wird gespeichert, und das Blatt bleibt im Popup erreichbar.
 
@@ -192,8 +192,8 @@ Er ist Best-Effort. Er greift, wenn die Fensterzahl null erreicht; beendet sich 
 **Werden andere Browser oder andere Profile gereinigt?**
 Nein. Ein Profil, ein Browser, dieses Gerät.
 
-**Warum ist die Schutzliste kostenpflichtig?**
-Weil die kostenlose Stufe bewusst keinen vollständigen Lauf ausführen kann. „Alles löschen" ist die riskante Operation, und sie kommt mit Sicherheitsnetz.
+**Warum ist nur der Vollmodus kostenpflichtig?**
+Weil „Alles löschen" der einzige Vorgang ist, der Anmeldungen entfernen kann, die Sie noch brauchen – und das Einzige, was ein gezielter Cleaner strukturell nicht kann. Alles andere hier, inklusive Schutzliste und Fokus-Profil, funktioniert ohne Lizenz. Pro verkauft die riskante Operation und die Langzeit-Aufzeichnung, nicht das Recht, Ihre eigenen Daten zu sehen.
 
 ---
 
@@ -243,8 +243,8 @@ license.js             Creem-Lizenz (plugin id: cleanmate)
 common/                store (Defaults/Merge), Domainabgleich, i18n, Formatierung, ui.css
 popup/                 Ein-Klick-Reinigung + Vorschau-Blatt + Aktionen zur aktuellen Seite
 options/               Modus, Datentypen, Auslöser, Listen, Fußabdruck-Schalter, Lizenz
-insights/              Fußabdruck-Seite — nur Pro; Aufzeichnung läuft, solange die Seite offen ist
-_locales/              en, zh_CN, ja, de, es, fr (je 164 Keys)
+insights/              Fußabdruck-Seite — Anzeige kostenlos; Aufzeichnung läuft, solange die Seite offen ist (Daueraufzeichnung ist Pro)
+_locales/              en, zh_CN, ja, de, es, fr (je 174 Keys)
 languages/             READMEs in allen Sprachen
 assets/                gemeinsame UI-Symbole
 store-listing/         Store-Texte in sechs Sprachen
@@ -269,7 +269,7 @@ tools/harness/         Mock-chrome.* und eine Testseite, nur für tools/shoot.js
 
 ## Urheberrecht
 
-VKT CleanMate ist ein unabhängiges Werkzeug und steht in keiner Verbindung zu Google, Microsoft oder anderen Browserherstellern. Chrome und Edge sind Marken ihrer jeweiligen Inhaber.
+VKT CleanMate ist ein unabhängiges Werkzeug und steht in keiner Verbindung zu Google, Microsoft oder anderen Browserherstellern. Chrome, Edge und Firefox sind Marken ihrer jeweiligen Inhaber.
 
 Die Erweiterung löscht Daten über die APIs des Browsers. Sie patcht den Browser nicht, verändert keine Systemdateien und installiert nichts außerhalb ihres eigenen Erweiterungsordners.
 

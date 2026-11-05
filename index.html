@@ -186,7 +186,7 @@ td:last-child,th:last-child{text-align:center;width:90px}
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="eyebrow" data-i="hero.eyebrow">Chrome · Edge · Manifest V3</span>
+        <span class="eyebrow" data-i="hero.eyebrow">Chrome · Edge · Firefox · Manifest V3</span>
         <h1><span data-i="hero.h1a">See what will be deleted</span><br><em data-i="hero.h1b">before it is deleted.</em></h1>
         <p class="lead" data-i="hero.lead">
           Most cleaners are one big “wipe everything” button — which is exactly why people are afraid to
@@ -210,7 +210,7 @@ td:last-child,th:last-child{text-align:center;width:90px}
           <div class="mrow warn"><span data-i="mock.prot">Protected hits</span><b data-i="mock.protV">3 skipped</b></div>
           <div class="mrow good"><span data-i="mock.keep">Keep last</span><b data-i="mock.keepV">7 days</b></div>
           <button class="mbtn" data-i="mock.btn">Clean 12 sites</button>
-          <p class="mnote" data-i="mock.note">Nothing is removed until you confirm.</p>
+          <p class="mnote" data-i="mock.note">Nothing is removed until the preview says so — scheduled runs clean on their own.</p>
         </div>
       </div>
     </div>
@@ -231,7 +231,7 @@ td:last-child,th:last-child{text-align:center;width:90px}
           <div class="card">
             <div class="card-num">1</div>
             <h3 data-i="why.c1t">Preview first</h3>
-            <p data-i="why.c1p">Every cleanup starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.</p>
+            <p data-i="why.c1p">Every manual run starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.</p>
           </div>
           <div class="card">
             <div class="card-num">2</div>
@@ -247,11 +247,11 @@ td:last-child,th:last-child{text-align:center;width:90px}
       </div>
 
       <div class="features">
-        <div class="feat"><span class="feat-ico">🧹</span><div><b data-i="feat.f1t">Nine data types</b><span data-i="feat.f1p">History, cache, cookies, downloads, form data, local storage, IndexedDB, service workers and saved passwords — each toggleable.</span></div></div>
+        <div class="feat"><span class="feat-ico">🧹</span><div><b data-i="feat.f1t">Nine data types</b><span data-i="feat.f1p">History, cache, cookies, downloads, form data, local storage, IndexedDB, service workers and saved passwords — each with its own switch; the first five clear per site, the last four only browser-wide.</span></div></div>
         <div class="feat"><span class="feat-ico">⏱️</span><div><b data-i="feat.f2t">Five triggers</b><span data-i="feat.f2p">Browser startup, browser close, every N minutes, daily at a set time, after N minutes idle.</span></div></div>
         <div class="feat"><span class="feat-ico">🎚️</span><div><b data-i="feat.f3t">Per-trigger scope</b><span data-i="feat.f3p">Clear only history + cache every few hours, deep-clean when the browser closes.</span></div></div>
-        <div class="feat"><span class="feat-ico">🗓️</span><div><b data-i="feat.f4t">Retention window</b><span data-i="feat.f4p">Keep the last 1 hour, 3, 7 or 30 days — or everything.</span></div></div>
-        <div class="feat"><span class="feat-ico">📊</span><div><b data-i="feat.f5t">Focus footprint (Pro)</b><span data-i="feat.f5p">Time actually spent watching per domain, not tabs opened. Off by default, and only records while its page is open.</span></div></div>
+        <div class="feat"><span class="feat-ico">🗓️</span><div><b data-i="feat.f4t">Retention window</b><span data-i="feat.f4p">Keep the last 1, 3, 7 or 30 days — or everything.</span></div></div>
+        <div class="feat"><span class="feat-ico">📊</span><div><b data-i="feat.f5t">Focus footprint</b><span data-i="feat.f5p">Time actually spent watching per domain, not tabs opened. Off by default, and only records while its page is open.</span></div></div>
         <div class="feat"><span class="feat-ico">⌨️</span><div><b data-i="feat.f6t">Shortcuts</b><span data-i="feat.f6p">Alt+Shift+C cleans now, Alt+Shift+X cleans and closes every tab. Both work with auto-clean off.</span></div></div>
       </div>
 
@@ -281,11 +281,13 @@ td:last-child,th:last-child{text-align:center;width:90px}
         <tbody>
           <tr><td data-i="price.r1">Targeted mode (clean list, unlimited)</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td data-i="price.r2">Manual + scheduled cleaning</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td data-i="price.r3">Preview before cleaning</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r3">Preview on manual runs</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td data-i="price.r4">Full mode (all sites minus protected)</td><td class="no">—</td><td class="yes">✓</td></tr>
-          <tr><td data-i="price.r5">Protected list</td><td class="no">—</td><td class="yes">✓</td></tr>
-          <tr><td data-i="price.r6">Focus footprint + suggestions</td><td class="no">—</td><td class="yes">✓</td></tr>
-          <tr><td data-i="price.r7">Footprint CSV export</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r5">Protected list (wins in both modes)</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r6">Focus footprint, ranking, suggestions</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r7">Footprint CSV export</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r8">Recording after the footprint page closes</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><td data-i="price.r9">30-day trend, this week vs last</td><td class="no">—</td><td class="yes">✓</td></tr>
         </tbody>
       </table>
       <p class="plan-note" data-i="price.note">One licence covers two browsers, and the free features keep working if it expires.</p>
@@ -362,29 +364,29 @@ const LANGS = {
     "title": "VKT CleanMate — Preview-first browsing data cleaner",
     "desc": "VKT CleanMate cleans browsing history, cache and cookies on your terms. See what will be deleted before it is deleted, keep trusted sites untouched, and find out where your focus time goes.",
     "nav.features": "Features", "nav.plans": "Free vs Pro", "nav.privacy": "Privacy", "nav.support": "Support",
-    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "See what will be deleted", "hero.h1b": "before it is deleted.",
+    "hero.eyebrow": "Chrome · Edge · Firefox · Manifest V3", "hero.h1a": "See what will be deleted", "hero.h1b": "before it is deleted.",
     "hero.lead": "Most cleaners are one big “wipe everything” button — which is exactly why people are afraid to switch them on. VKT CleanMate shows you the damage first, keeps the sites you trust untouched, and tells you where your focus time actually goes.",
     "hero.cta1": "Get VKT CleanMate", "hero.cta2": "View on GitHub",
     "hero.meta": "Free targeted mode · No account · No telemetry · Everything local",
     "mock.scope": "Scope", "mock.scopeV": "Clean list only", "mock.sites": "Sites found", "mock.hist": "History entries",
     "mock.cook": "Cookies", "mock.prot": "Protected hits", "mock.protV": "3 skipped", "mock.keep": "Keep last", "mock.keepV": "7 days",
-    "mock.btn": "Clean 12 sites", "mock.note": "Nothing is removed until you confirm.",
+    "mock.btn": "Clean 12 sites", "mock.note": "Nothing is removed until the preview says so — scheduled runs clean on their own.",
     "why.title": "Built around one fear", "why.sub": "“If I turn this on, will it log me out of everything?”",
-    "why.c1t": "Preview first", "why.c1p": "Every cleanup starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.",
+    "why.c1t": "Preview first", "why.c1p": "Every manual run starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.",
     "why.c2t": "Targeted by default", "why.c2p": "Only the domains on your clean list are touched. Everything else is never included, so a free user has no way to lose data by accident.",
     "why.c3t": "Protected where it counts", "why.c3p": "In Full mode your protected domains are skipped entirely — banks, mail, anything you want to stay signed in to.",
     "feat.title": "What it actually does", "feat.sub": "Nine data types, five triggers, and a domain rule you can explain in one sentence.",
-    "feat.f1t": "Nine data types", "feat.f1p": "History, cache, cookies, downloads, form data, local storage, IndexedDB, service workers and saved passwords — each toggleable.",
+    "feat.f1t": "Nine data types", "feat.f1p": "History, cache, cookies, downloads, form data, local storage, IndexedDB, service workers and saved passwords — each with its own switch; the first five clear per site, the last four only browser-wide.",
     "feat.f2t": "Five triggers", "feat.f2p": "Browser startup, browser close, every N minutes, daily at a set time, after N minutes idle.",
     "feat.f3t": "Per-trigger scope", "feat.f3p": "Clear only history + cache every few hours, deep-clean when the browser closes.",
-    "feat.f4t": "Retention window", "feat.f4p": "Keep the last 1 hour, 3, 7 or 30 days — or everything.",
-    "feat.f5t": "Focus footprint (Pro)", "feat.f5p": "Time actually spent watching per domain, not tabs opened. Off by default, and only records while its page is open.",
+    "feat.f4t": "Retention window", "feat.f4p": "Keep the last 1, 3, 7 or 30 days — or everything.",
+    "feat.f5t": "Focus footprint", "feat.f5p": "Time actually spent watching per domain, not tabs opened. Off by default; free records only while its page is open, Pro keeps recording in the background.",
     "feat.f6t": "Shortcuts", "feat.f6p": "Alt+Shift+C cleans now, Alt+Shift+X cleans and closes every tab. Both work with auto-clean off.",
-    "price.title": "Free vs Pro", "price.sub": "The free tier deliberately cannot run a full wipe — nobody loses data for not paying.",
+    "price.title": "Free vs Pro", "price.sub": "The licence buys one thing: the full wipe. The protected list, the footprint data and the CSV export are free.",
     "price.th1": "Capability", "price.th2": "Free", "price.th3": "Pro",
-    "price.r1": "Targeted mode (clean list, unlimited)", "price.r2": "Manual + scheduled cleaning", "price.r3": "Preview before cleaning",
-    "price.r4": "Full mode (all sites minus protected)", "price.r5": "Protected list", "price.r6": "Focus footprint + suggestions",
-    "price.r7": "Footprint CSV export",
+    "price.r1": "Targeted mode (clean list, unlimited)", "price.r2": "Manual + scheduled cleaning", "price.r3": "Preview on manual runs",
+    "price.r4": "Full mode (all sites minus protected)", "price.r5": "Protected list, in both modes", "price.r6": "Focus footprint, ranking, suggestions",
+    "price.r7": "Footprint CSV export", "price.r8": "Recording after the footprint page closes", "price.r9": "30-day trend, this week vs last",
     "price.note": "One licence covers two browsers, and the free features keep working if it expires.",
     "pr.title": "Private by design",
     "pr.lead": "Your browsing data never leaves the device. There is no account, no analytics and no telemetry — the only outbound request is licence validation, and only if you enter a key.",
@@ -411,29 +413,29 @@ const LANGS = {
     "title": "VKT CleanMate — 先预览再清理的浏览数据清理器",
     "desc": "VKT CleanMate 按你的规则清理浏览历史、缓存与 Cookie。删除之前先看清要删什么，信任的站点永不触碰，顺带告诉你时间花在哪了。",
     "nav.features": "功能", "nav.plans": "免费与 Pro", "nav.privacy": "隐私", "nav.support": "支持",
-    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "先看清要删什么，", "hero.h1b": "再动手删。",
+    "hero.eyebrow": "Chrome · Edge · Firefox · Manifest V3", "hero.h1a": "先看清要删什么，", "hero.h1b": "再动手删。",
     "hero.lead": "大多数清理工具就是一个“全部清除”的大按钮 —— 这也正是人们不敢打开它的原因。VKT CleanMate 先把要动的东西摆在你面前，信任的站点一律不碰，还告诉你时间到底花在了哪里。",
     "hero.cta1": "获取 VKT CleanMate", "hero.cta2": "在 GitHub 查看",
     "hero.meta": "免费精准模式 · 无需账号 · 无埋点 · 全部本地",
     "mock.scope": "清理范围", "mock.scopeV": "仅清理名单", "mock.sites": "命中站点", "mock.hist": "历史记录",
     "mock.cook": "Cookie", "mock.prot": "保护名单命中", "mock.protV": "跳过 3 个", "mock.keep": "保留最近", "mock.keepV": "7 天",
-    "mock.btn": "清理 12 个站点", "mock.note": "在你确认之前，什么都不会删。",
+    "mock.btn": "清理 12 个站点", "mock.note": "预览确认之前什么都不会删；定时触发按设置自行清理。",
     "why.title": "围绕一个恐惧设计", "why.sub": "“打开它，会不会把所有网站的登录都退了？”",
-    "why.c1t": "先预览", "why.c1p": "每次清理都先给摘要：命中多少站点、要删多少条历史和 Cookie、按哪一档保留期算。",
+    "why.c1t": "先预览", "why.c1p": "每次手动清理都先给摘要：命中多少站点、要删多少条历史和 Cookie、按哪一档保留期算。",
     "why.c2t": "默认精准", "why.c2p": "只动清理名单里的域名，其余站点根本不进入范围，所以免费用户没有误删的路径。",
     "why.c3t": "该保护的保护住", "why.c3p": "全面模式下，保护名单里的域名整域跳过 —— 银行、邮箱，任何你想保持登录的站点。",
     "feat.title": "它实际做的事", "feat.sub": "九类数据、五种触发，以及一句话就能讲清的域名规则。",
-    "feat.f1t": "九类数据", "feat.f1p": "历史、缓存、Cookie、下载记录、表单数据、本地存储、IndexedDB、Service Worker 和已保存的密码，各自独立开关。",
+    "feat.f1t": "九类数据", "feat.f1p": "历史、缓存、Cookie、下载记录、表单数据、本地存储、IndexedDB、Service Worker 和已保存的密码，各自独立开关；其中缓存、Cookie、本地存储、IndexedDB、Service Worker 可按站点清理，历史、下载、表单数据和密码只能整体清除。",
     "feat.f2t": "五种触发", "feat.f2p": "浏览器启动、关闭浏览器、每 N 分钟、每天固定时刻、空闲 N 分钟后。",
     "feat.f3t": "按触发器分范围", "feat.f3p": "每几小时只清历史和缓存，关闭浏览器时再深度清理。",
-    "feat.f4t": "保留期", "feat.f4p": "保留最近 1 小时、3 天、7 天、30 天，或者全部清除。",
-    "feat.f5t": "专注足迹（Pro）", "feat.f5p": "按域名统计你真正在看的时长，而不是开了多少标签页。默认关闭，且只在足迹页打开时采集。",
+    "feat.f4t": "保留期", "feat.f4p": "保留最近 1 天、3 天、7 天、30 天，或者全部清除。",
+    "feat.f5t": "专注足迹", "feat.f5p": "按域名统计你真正在看的时长，而不是开了多少标签页。默认关闭；免费版只在足迹页打开时采集，Pro 关掉页面后继续记录。",
     "feat.f6t": "快捷键", "feat.f6p": "Alt+Shift+C 立即清理，Alt+Shift+X 清理并关闭所有标签页。关掉自动清理也照样可用。",
-    "price.title": "免费版与 Pro", "price.sub": "免费版刻意不提供全清 —— 不会有人因为没付费而丢数据。",
+    "price.title": "免费版与 Pro", "price.sub": "付费只买一件事：全清。保护名单、足迹数据和 CSV 导出都免费。",
     "price.th1": "能力", "price.th2": "免费", "price.th3": "Pro",
-    "price.r1": "精准模式（清理名单，不限条数）", "price.r2": "手动 + 定时清理", "price.r3": "清理前预览",
-    "price.r4": "全面模式（清全部但跳过保护名单）", "price.r5": "保护名单", "price.r6": "专注足迹与清理建议",
-    "price.r7": "足迹 CSV 导出",
+    "price.r1": "精准模式（清理名单，不限条数）", "price.r2": "手动 + 定时清理", "price.r3": "手动清理前预览",
+    "price.r4": "全面模式（清全部但跳过保护名单）", "price.r5": "保护名单（两种模式都生效）", "price.r6": "专注足迹、排行与清理建议",
+    "price.r7": "足迹 CSV 导出", "price.r8": "足迹页关闭后继续记录", "price.r9": "30 天趋势，本周对比上周",
     "price.note": "一份授权覆盖两台浏览器，过期后免费功能照常可用。",
     "pr.title": "隐私是设计出来的",
     "pr.lead": "浏览数据不出设备。没有账号、没有统计分析、没有埋点 —— 唯一的对外请求是授权校验，而且只在你输入密钥后才发生。",
@@ -460,29 +462,29 @@ const LANGS = {
     "title": "VKT CleanMate — 削除前に確認できる閲覧データクリーナー",
     "desc": "VKT CleanMate は履歴・キャッシュ・Cookie を自分のルールで削除します。消える前に内容を確認でき、信頼したサイトはそのまま残せます。",
     "nav.features": "機能", "nav.plans": "無料と Pro", "nav.privacy": "プライバシー", "nav.support": "サポート",
-    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "何が消えるかを先に見て、", "hero.h1b": "それから削除する。",
+    "hero.eyebrow": "Chrome · Edge · Firefox · Manifest V3", "hero.h1a": "何が消えるかを先に見て、", "hero.h1b": "それから削除する。",
     "hero.lead": "多くのクリーナーは「全部消す」ボタン一つです。だから怖くてオンにできない。VKT CleanMate は、まず何が動くのかを提示し、信頼したサイトには触れず、時間がどこへ消えているかまで教えます。",
     "hero.cta1": "VKT CleanMate を入手", "hero.cta2": "GitHub で見る",
     "hero.meta": "無料の指定モード · アカウント不要 · 解析なし · すべてローカル",
     "mock.scope": "対象範囲", "mock.scopeV": "クリーンリストのみ", "mock.sites": "対象サイト", "mock.hist": "履歴の件数",
     "mock.cook": "Cookie", "mock.prot": "保護リスト該当", "mock.protV": "3 件スキップ", "mock.keep": "保持期間", "mock.keepV": "7 日",
-    "mock.btn": "12 サイトを削除", "mock.note": "確認するまで何も削除されません。",
+    "mock.btn": "12 サイトを削除", "mock.note": "プレビューを確認するまで削除されません。スケジュール実行は設定どおりに動きます。",
     "why.title": "一つの不安から設計しました", "why.sub": "「オンにしたら、全部ログアウトされるのでは？」",
-    "why.c1t": "まずプレビュー", "why.c1p": "削除のたびに要約から始まります。対象サイト数、消える履歴と Cookie の件数、適用される保持期間。",
+    "why.c1t": "まずプレビュー", "why.c1p": "手動で実行するたびに要約から始まります。対象サイト数、消える履歴と Cookie の件数、適用される保持期間。",
     "why.c2t": "既定は指定モード", "why.c2p": "触れるのはクリーンリストのドメインだけ。それ以外は範囲に入らないので、無料ユーザーに誤削除の道はありません。",
     "why.c3t": "守るべきものは守る", "why.c3p": "全消去モードでは保護リストのドメインを丸ごと飛ばします。銀行、メール、ログインを保ちたいサイト。",
     "feat.title": "実際にできること", "feat.sub": "九つのデータ種別、五つのトリガー、一文で説明できるドメイン規則。",
-    "feat.f1t": "九つのデータ種別", "feat.f1p": "履歴、キャッシュ、Cookie、ダウンロード履歴、フォームデータ、ローカルストレージ、IndexedDB、Service Worker、保存されたパスワード。各々独立したスイッチです。",
+    "feat.f1t": "九つのデータ種別", "feat.f1p": "履歴、キャッシュ、Cookie、ダウンロード履歴、フォームデータ、ローカルストレージ、IndexedDB、Service Worker、保存されたパスワード。各々独立したスイッチです。うちキャッシュ・Cookie・ローカルストレージ・IndexedDB・Service Worker はサイト単位、履歴・ダウンロード・フォームデータ・パスワードはブラウザ全体でのみ削除できます。",
     "feat.f2t": "五つのトリガー", "feat.f2p": "ブラウザ起動時、終了時、N 分ごと、毎日決まった時刻、N 分間アイドル後。",
     "feat.f3t": "トリガーごとの範囲", "feat.f3p": "数時間ごとは履歴＋キャッシュだけ、ブラウザ終了時は深く削除。",
-    "feat.f4t": "保持期間", "feat.f4p": "直近 1 時間、3 日、7 日、30 日、またはすべて。",
-    "feat.f5t": "フォーカス足跡（Pro）", "feat.f5p": "開いたタブ数ではなく、実際に見ていた時間をドメインごとに。既定はオフで、専用ページを開いている間だけ記録します。",
+    "feat.f4t": "保持期間", "feat.f4p": "直近 1 日、3 日、7 日、30 日、またはすべて。",
+    "feat.f5t": "フォーカス足跡", "feat.f5p": "開いたタブ数ではなく、実際に見ていた時間をドメインごとに。既定はオフで、無料版は専用ページを開いている間だけ、Pro は閉じても記録を続けます。",
     "feat.f6t": "ショートカット", "feat.f6p": "Alt+Shift+C で今すぐ削除、Alt+Shift+X で削除してすべてのタブを閉じる。自動削除がオフでも使えます。",
-    "price.title": "無料と Pro", "price.sub": "無料版は意図的に全消去を実行できません。払わないことでデータを失う人はいません。",
+    "price.title": "無料と Pro", "price.sub": "有料なのは全消去モードだけ。保護リスト、足跡データ、CSV 書き出しは無料です。",
     "price.th1": "機能", "price.th2": "無料", "price.th3": "Pro",
-    "price.r1": "指定モード（クリーンリスト、無制限）", "price.r2": "手動＋スケジュール削除", "price.r3": "削除前のプレビュー",
-    "price.r4": "全消去モード（保護リスト以外）", "price.r5": "保護リスト", "price.r6": "フォーカス足跡と提案",
-    "price.r7": "足跡の CSV 書き出し",
+    "price.r1": "指定モード（クリーンリスト、無制限）", "price.r2": "手動＋スケジュール削除", "price.r3": "手動実行前のプレビュー",
+    "price.r4": "全消去モード（保護リスト以外）", "price.r5": "保護リスト（どちらのモードでも有効）", "price.r6": "フォーカス足跡・ランキング・提案",
+    "price.r7": "足跡の CSV 書き出し", "price.r8": "足跡ページを閉じても記録", "price.r9": "30 日間の推移、今週と先週",
     "price.note": "ライセンス一本で二つのブラウザに対応。期限切れ後も無料機能は使えます。",
     "pr.title": "プライバシーは設計から",
     "pr.lead": "閲覧データが端末の外に出ることはありません。アカウントも解析もテレメトリもなく、外部への通信はキーを入力したときのライセンス検証だけです。",
@@ -509,29 +511,29 @@ const LANGS = {
     "title": "VKT CleanMate — Browserdaten löschen, aber erst ansehen",
     "desc": "VKT CleanMate löscht Verlauf, Cache und Cookies nach Ihren Regeln. Sehen Sie vorher, was verschwindet, und lassen Sie vertraute Seiten unangetastet.",
     "nav.features": "Funktionen", "nav.plans": "Gratis & Pro", "nav.privacy": "Datenschutz", "nav.support": "Unterstützen",
-    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "Erst sehen, was gelöscht wird —", "hero.h1b": "dann löschen.",
+    "hero.eyebrow": "Chrome · Edge · Firefox · Manifest V3", "hero.h1a": "Erst sehen, was gelöscht wird —", "hero.h1b": "dann löschen.",
     "hero.lead": "Die meisten Cleaner sind ein einziger „alles löschen“-Knopf. Genau deshalb traut sich kaum jemand, sie einzuschalten. VKT CleanMate zeigt Ihnen zuerst, was passiert, lässt vertraute Seiten unangetastet und sagt Ihnen, wohin Ihre Zeit geht.",
     "hero.cta1": "VKT CleanMate holen", "hero.cta2": "Auf GitHub ansehen",
     "hero.meta": "Kostenloser gezielter Modus · Kein Konto · Keine Telemetrie · Alles lokal",
     "mock.scope": "Umfang", "mock.scopeV": "Nur Reinigungsliste", "mock.sites": "Gefundene Seiten", "mock.hist": "Verlaufseinträge",
     "mock.cook": "Cookies", "mock.prot": "Schutz-Treffer", "mock.protV": "3 übersprungen", "mock.keep": "Behalten", "mock.keepV": "7 Tage",
-    "mock.btn": "12 Seiten reinigen", "mock.note": "Nichts wird entfernt, bevor Sie bestätigen.",
+    "mock.btn": "12 Seiten reinigen", "mock.note": "Entfernt wird erst, wenn die Vorschau es sagt; geplante Läufe reinigen allein.",
     "why.title": "Rund um eine Angst gebaut", "why.sub": "„Meldet mich das überall ab, wenn ich es einschalte?“",
-    "why.c1t": "Erst die Vorschau", "why.c1p": "Jeder Lauf beginnt mit einer Zusammenfassung: wie viele Seiten betroffen sind, wie viele Verlaufseinträge und Cookies gehen, welches Aufbewahrungsfenster gilt.",
+    "why.c1t": "Erst die Vorschau", "why.c1p": "Jeder manuelle Lauf beginnt mit einer Zusammenfassung: wie viele Seiten betroffen sind, wie viele Verlaufseinträge und Cookies gehen, welches Aufbewahrungsfenster gilt.",
     "why.c2t": "Gezielt als Standard", "why.c2p": "Berührt werden nur die Domains Ihrer Reinigungsliste. Alles andere ist nie im Umfang, ein kostenloser Nutzer kann also nichts versehentlich verlieren.",
     "why.c3t": "Geschützt, wo es zählt", "why.c3p": "Im Vollmodus werden Ihre geschützten Domains komplett übersprungen — Bank, Mail, alles, wo Sie angemeldet bleiben wollen.",
     "feat.title": "Was es tatsächlich tut", "feat.sub": "Neun Datentypen, fünf Auslöser und eine Domainregel, die in einen Satz passt.",
-    "feat.f1t": "Neun Datentypen", "feat.f1p": "Verlauf, Cache, Cookies, Downloads, Formulardaten, lokaler Speicher, IndexedDB, Service Worker und gespeicherte Passwörter — jeder einzeln schaltbar.",
+    "feat.f1t": "Neun Datentypen", "feat.f1p": "Verlauf, Cache, Cookies, Downloads, Formulardaten, lokaler Speicher, IndexedDB, Service Worker und gespeicherte Passwörter — jeder einzeln schaltbar; Cache, Cookies, lokale Speicher, IndexedDB und Service Worker pro Site, Verlauf, Downloads, Formulardaten und Passwörter nur fürs ganze Browserprofil.",
     "feat.f2t": "Fünf Auslöser", "feat.f2p": "Browserstart, Schließen, alle N Minuten, täglich zu fester Zeit, nach N Minuten Inaktivität.",
     "feat.f3t": "Umfang pro Auslöser", "feat.f3p": "Alle paar Stunden nur Verlauf + Cache, beim Schließen ein gründlicher Lauf.",
-    "feat.f4t": "Aufbewahrung", "feat.f4p": "Letzte Stunde, 3, 7 oder 30 Tage behalten — oder alles.",
-    "feat.f5t": "Fokus-Fußabdruck (Pro)", "feat.f5p": "Tatsächlich angesehene Zeit pro Domain, nicht geöffnete Tabs. Standardmäßig aus, aufgezeichnet nur bei geöffneter Seite.",
+    "feat.f4t": "Aufbewahrung", "feat.f4p": "Letzten Tag, 3, 7 oder 30 Tage behalten — oder alles.",
+    "feat.f5t": "Fokus-Fußabdruck", "feat.f5p": "Tatsächlich angesehene Zeit pro Domain, nicht geöffnete Tabs. Standardmäßig aus; kostenlos nur bei geöffneter Seite, Pro zeichnet im Hintergrund weiter auf.",
     "feat.f6t": "Tastenkombinationen", "feat.f6p": "Alt+Shift+C reinigt sofort, Alt+Shift+X reinigt und schließt alle Tabs. Beides wirkt auch bei ausgeschalteter Automatik.",
-    "price.title": "Gratis und Pro", "price.sub": "Die kostenlose Stufe kann bewusst nicht alles löschen — niemand verliert Daten, weil er nicht zahlt.",
+    "price.title": "Gratis und Pro", "price.sub": "Bezahlt ist nur der Vollmodus. Schutzliste, Fußabdruck-Daten und CSV-Export sind kostenlos.",
     "price.th1": "Funktion", "price.th2": "Gratis", "price.th3": "Pro",
-    "price.r1": "Gezielter Modus (Reinigungsliste, unbegrenzt)", "price.r2": "Manuell + geplant reinigen", "price.r3": "Vorschau vor dem Reinigen",
-    "price.r4": "Vollmodus (alles außer Schutzliste)", "price.r5": "Schutzliste", "price.r6": "Fokus-Fußabdruck + Vorschläge",
-    "price.r7": "CSV-Export des Fußabdrucks",
+    "price.r1": "Gezielter Modus (Reinigungsliste, unbegrenzt)", "price.r2": "Manuell + geplant reinigen", "price.r3": "Vorschau bei manuellen Läufen",
+    "price.r4": "Vollmodus (alles außer Schutzliste)", "price.r5": "Schutzliste (in beiden Modi)", "price.r6": "Fokus-Fußabdruck, Rangliste, Vorschläge",
+    "price.r7": "CSV-Export des Fußabdrucks", "price.r8": "Aufzeichnung nach Schließen der Fußabdruck-Seite", "price.r9": "30-Tage-Verlauf, diese Woche gegen die letzte",
     "price.note": "Eine Lizenz deckt zwei Browser, nach Ablauf laufen die kostenlosen Funktionen weiter.",
     "pr.title": "Datenschutz by Design",
     "pr.lead": "Ihre Browserdaten verlassen das Gerät nie. Kein Konto, keine Analyse, keine Telemetrie — die einzige ausgehende Anfrage ist die Lizenzprüfung, und nur wenn Sie einen Schlüssel eingeben.",
@@ -558,29 +560,29 @@ const LANGS = {
     "title": "VKT CleanMate — Limpia viendo antes qué se borra",
     "desc": "VKT CleanMate limpia historial, caché y cookies según tus reglas. Ve qué desaparecerá antes de borrar y mantén intactos los sitios de confianza.",
     "nav.features": "Funciones", "nav.plans": "Gratis y Pro", "nav.privacy": "Privacidad", "nav.support": "Apoyar",
-    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "Ve qué se va a borrar", "hero.h1b": "antes de borrarlo.",
+    "hero.eyebrow": "Chrome · Edge · Firefox · Manifest V3", "hero.h1a": "Ve qué se va a borrar", "hero.h1b": "antes de borrarlo.",
     "hero.lead": "Casi todos los limpiadores son un botón de «borrarlo todo», y por eso da miedo encenderlos. VKT CleanMate te enseña primero qué va a pasar, deja intactos los sitios de confianza y te dice en qué se va tu tiempo.",
     "hero.cta1": "Obtener VKT CleanMate", "hero.cta2": "Ver en GitHub",
     "hero.meta": "Modo dirigido gratis · Sin cuenta · Sin telemetría · Todo local",
     "mock.scope": "Alcance", "mock.scopeV": "Solo lista de limpieza", "mock.sites": "Sitios encontrados", "mock.hist": "Entradas de historial",
     "mock.cook": "Cookies", "mock.prot": "Coincidencias protegidas", "mock.protV": "3 omitidos", "mock.keep": "Conservar", "mock.keepV": "7 días",
-    "mock.btn": "Limpiar 12 sitios", "mock.note": "No se borra nada hasta que confirmes.",
+    "mock.btn": "Limpiar 12 sitios", "mock.note": "Nada se borra hasta que la vista previa lo diga; las programaciones limpian solas.",
     "why.title": "Diseñado alrededor de un miedo", "why.sub": "«Si lo activo, ¿me desconectará de todo?»",
-    "why.c1t": "Primero la vista previa", "why.c1p": "Cada limpieza empieza con un resumen: cuántos sitios coinciden, cuántas entradas de historial y cookies se van, y qué ventana de conservación se aplica.",
+    "why.c1t": "Primero la vista previa", "why.c1p": "Cada limpieza manual empieza con un resumen: cuántos sitios coinciden, cuántas entradas de historial y cookies se van, y qué ventana de conservación se aplica.",
     "why.c2t": "Dirigido por defecto", "why.c2p": "Solo se tocan los dominios de tu lista. El resto nunca entra en el alcance, así que un usuario gratuito no puede perder datos por accidente.",
     "why.c3t": "Protegido donde importa", "why.c3p": "En modo completo tus dominios protegidos se omiten por completo: bancos, correo, lo que quieras mantener conectado.",
     "feat.title": "Lo que hace de verdad", "feat.sub": "Nueve tipos de datos, cinco disparadores y una regla de dominios que cabe en una frase.",
-    "feat.f1t": "Nueve tipos de datos", "feat.f1p": "Historial, caché, cookies, descargas, datos de formularios, almacenamiento local, IndexedDB, service workers y contraseñas guardadas, cada uno con su interruptor.",
+    "feat.f1t": "Nueve tipos de datos", "feat.f1p": "Historial, caché, cookies, descargas, datos de formularios, almacenamiento local, IndexedDB, service workers y contraseñas guardadas, cada uno con su interruptor; caché, cookies, almacenamiento local, IndexedDB y service workers por sitio; historial, descargas, datos de formulario y contraseñas solo en todo el navegador.",
     "feat.f2t": "Cinco disparadores", "feat.f2p": "Al arrancar, al cerrar, cada N minutos, a diario a una hora fija, tras N minutos inactivo.",
     "feat.f3t": "Alcance por disparador", "feat.f3p": "Solo historial + caché cada pocas horas, limpieza profunda al cerrar el navegador.",
-    "feat.f4t": "Conservación", "feat.f4p": "Mantener la última hora, 3, 7 o 30 días, o todo.",
-    "feat.f5t": "Huella de enfoque (Pro)", "feat.f5p": "Tiempo realmente visto por dominio, no pestañas abiertas. Desactivada por defecto y solo mide con su página abierta.",
+    "feat.f4t": "Conservación", "feat.f4p": "Mantener el último día, 3, 7 o 30 días, o todo.",
+    "feat.f5t": "Huella de enfoque", "feat.f5p": "Tiempo realmente visto por dominio, no pestañas abiertas. Desactivada por defecto; gratis solo mide con su página abierta, Pro sigue al cerrarla.",
     "feat.f6t": "Atajos", "feat.f6p": "Alt+Shift+C limpia ahora, Alt+Shift+X limpia y cierra todas las pestañas. Funcionan con la limpieza automática apagada.",
-    "price.title": "Gratis y Pro", "price.sub": "La versión gratuita no puede hacer un borrado completo, a propósito: nadie pierde datos por no pagar.",
+    "price.title": "Gratis y Pro", "price.sub": "Lo único de pago es el modo completo. La lista de protección, los datos de la huella y el CSV son gratis.",
     "price.th1": "Capacidad", "price.th2": "Gratis", "price.th3": "Pro",
-    "price.r1": "Modo dirigido (lista de limpieza, ilimitada)", "price.r2": "Limpieza manual + programada", "price.r3": "Vista previa antes de limpiar",
-    "price.r4": "Modo completo (todo menos lo protegido)", "price.r5": "Lista de protección", "price.r6": "Huella de enfoque + sugerencias",
-    "price.r7": "Exportación CSV de la huella",
+    "price.r1": "Modo dirigido (lista de limpieza, ilimitada)", "price.r2": "Limpieza manual + programada", "price.r3": "Vista previa en ejecuciones manuales",
+    "price.r4": "Modo completo (todo menos lo protegido)", "price.r5": "Lista de protección (en ambos modos)", "price.r6": "Huella, ranking y sugerencias",
+    "price.r7": "Exportación CSV de la huella", "price.r8": "Registro tras cerrar la página de la huella", "price.r9": "Tendencia de 30 días, esta semana frente a la anterior",
     "price.note": "Una licencia cubre dos navegadores y las funciones gratuitas siguen funcionando al caducar.",
     "pr.title": "Privacidad desde el diseño",
     "pr.lead": "Tus datos de navegación nunca salen del dispositivo. Sin cuenta, sin analítica y sin telemetría: la única petición saliente es la validación de licencia, y solo si introduces una clave.",
@@ -607,29 +609,29 @@ const LANGS = {
     "title": "VKT CleanMate — Voir avant de nettoyer",
     "desc": "VKT CleanMate efface historique, cache et cookies selon vos règles. Voyez ce qui sera supprimé avant de le supprimer et gardez vos sites de confiance intacts.",
     "nav.features": "Fonctions", "nav.plans": "Gratuit et Pro", "nav.privacy": "Confidentialité", "nav.support": "Soutenir",
-    "hero.eyebrow": "Chrome · Edge · Manifest V3", "hero.h1a": "Voir ce qui va être supprimé", "hero.h1b": "avant de le supprimer.",
+    "hero.eyebrow": "Chrome · Edge · Firefox · Manifest V3", "hero.h1a": "Voir ce qui va être supprimé", "hero.h1b": "avant de le supprimer.",
     "hero.lead": "La plupart des nettoyeurs sont un gros bouton « tout effacer », et c’est bien pour cela qu’on n’ose pas les activer. VKT CleanMate montre d’abord ce qui va se passer, laisse vos sites de confiance intacts et vous dit où passe votre temps.",
     "hero.cta1": "Obtenir VKT CleanMate", "hero.cta2": "Voir sur GitHub",
     "hero.meta": "Mode ciblé gratuit · Sans compte · Sans télémétrie · Tout en local",
     "mock.scope": "Portée", "mock.scopeV": "Liste de nettoyage seule", "mock.sites": "Sites trouvés", "mock.hist": "Entrées d’historique",
     "mock.cook": "Cookies", "mock.prot": "Hits protégés", "mock.protV": "3 ignorés", "mock.keep": "Conserver", "mock.keepV": "7 jours",
-    "mock.btn": "Nettoyer 12 sites", "mock.note": "Rien n’est supprimé avant votre confirmation.",
+    "mock.btn": "Nettoyer 12 sites", "mock.note": "Rien n’est supprimé tant que l’aperçu ne le dit pas ; les planifications nettoient seules.",
     "why.title": "Construit autour d’une peur", "why.sub": "« Si je l’active, vais-je être déconnecté partout ? »",
-    "why.c1t": "L’aperçu d’abord", "why.c1p": "Chaque nettoyage commence par un résumé : combien de sites correspondent, combien d’entrées d’historique et de cookies partent, et quelle fenêtre de conservation s’applique.",
+    "why.c1t": "L’aperçu d’abord", "why.c1p": "Chaque nettoyage manuel commence par un résumé : combien de sites correspondent, combien d’entrées d’historique et de cookies partent, et quelle fenêtre de conservation s’applique.",
     "why.c2t": "Ciblé par défaut", "why.c2p": "Seuls les domaines de votre liste sont touchés. Le reste n’entre jamais dans la portée : un utilisateur gratuit ne peut pas perdre de données par accident.",
     "why.c3t": "Protégé là où ça compte", "why.c3p": "En mode complet, vos domaines protégés sont entièrement ignorés : banque, mail, tout ce où vous voulez rester connecté.",
     "feat.title": "Ce qu’il fait vraiment", "feat.sub": "Neuf types de données, cinq déclencheurs et une règle de domaines qui tient en une phrase.",
-    "feat.f1t": "Neuf types de données", "feat.f1p": "Historique, cache, cookies, téléchargements, données de formulaires, stockage local, IndexedDB, service workers et mots de passe enregistrés, chacun activable.",
+    "feat.f1t": "Neuf types de données", "feat.f1p": "Historique, cache, cookies, téléchargements, données de formulaires, stockage local, IndexedDB, service workers et mots de passe enregistrés, chacun activable ; cache, cookies, stockage local, IndexedDB et service workers site par site ; historique, téléchargements, données de formulaires et mots de passe uniquement pour tout le navigateur.",
     "feat.f2t": "Cinq déclencheurs", "feat.f2p": "Au démarrage, à la fermeture, toutes les N minutes, chaque jour à heure fixe, après N minutes d’inactivité.",
     "feat.f3t": "Portée par déclencheur", "feat.f3p": "Historique + cache seulement toutes les quelques heures, nettoyage profond à la fermeture.",
-    "feat.f4t": "Conservation", "feat.f4p": "Garder la dernière heure, 3, 7 ou 30 jours — ou tout.",
-    "feat.f5t": "Empreinte de concentration (Pro)", "feat.f5p": "Le temps réellement regardé par domaine, pas les onglets ouverts. Désactivée par défaut, et seulement quand sa page est ouverte.",
+    "feat.f4t": "Conservation", "feat.f4p": "Garder le dernier jour, 3, 7 ou 30 jours — ou tout.",
+    "feat.f5t": "Empreinte de concentration", "feat.f5p": "Le temps réellement regardé par domaine, pas les onglets ouverts. Désactivée par défaut ; gratuit seulement quand sa page est ouverte, Pro continue après fermeture.",
     "feat.f6t": "Raccourcis", "feat.f6p": "Alt+Shift+C nettoie maintenant, Alt+Shift+X nettoie et ferme tous les onglets. Les deux marchent même sans nettoyage auto.",
-    "price.title": "Gratuit et Pro", "price.sub": "La version gratuite ne peut délibérément pas tout effacer : personne ne perd de données faute de payer.",
+    "price.title": "Gratuit et Pro", "price.sub": "Seul le mode complet est payant. La liste de protection, les données d’empreinte et l’export CSV sont gratuits.",
     "price.th1": "Capacité", "price.th2": "Gratuit", "price.th3": "Pro",
-    "price.r1": "Mode ciblé (liste de nettoyage, illimitée)", "price.r2": "Nettoyage manuel + planifié", "price.r3": "Aperçu avant nettoyage",
-    "price.r4": "Mode complet (tout sauf la protection)", "price.r5": "Liste de protection", "price.r6": "Empreinte de concentration + suggestions",
-    "price.r7": "Export CSV de l’empreinte",
+    "price.r1": "Mode ciblé (liste de nettoyage, illimitée)", "price.r2": "Nettoyage manuel + planifié", "price.r3": "Aperçu sur les exécutions manuelles",
+    "price.r4": "Mode complet (tout sauf la protection)", "price.r5": "Liste de protection (dans les deux modes)", "price.r6": "Empreinte, classement et suggestions",
+    "price.r7": "Export CSV de l’empreinte", "price.r8": "Enregistrement après fermeture de la page d’empreinte", "price.r9": "Tendance sur 30 jours, cette semaine contre la précédente",
     "price.note": "Une licence couvre deux navigateurs, et les fonctions gratuites continuent après expiration.",
     "pr.title": "Confidentiel par conception",
     "pr.lead": "Vos données de navigation ne quittent jamais l’appareil. Pas de compte, pas d’analytique, pas de télémétrie : la seule requête sortante est la vérification de licence, et seulement si vous saisissez une clé.",
