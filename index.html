@@ -231,7 +231,7 @@ td:last-child,th:last-child{text-align:center;width:90px}
           <div class="card">
             <div class="card-num">1</div>
             <h3 data-i="why.c1t">Preview first</h3>
-            <p data-i="why.c1p">Every manual run starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.</p>
+            <p data-i="why.c1p">Every run from the popup starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.</p>
           </div>
           <div class="card">
             <div class="card-num">2</div>
@@ -252,7 +252,7 @@ td:last-child,th:last-child{text-align:center;width:90px}
         <div class="feat"><span class="feat-ico">🎚️</span><div><b data-i="feat.f3t">Per-trigger scope</b><span data-i="feat.f3p">Clear only history + cache every few hours, deep-clean when the browser closes.</span></div></div>
         <div class="feat"><span class="feat-ico">🗓️</span><div><b data-i="feat.f4t">Retention window</b><span data-i="feat.f4p">Keep the last 1, 3, 7 or 30 days — or everything.</span></div></div>
         <div class="feat"><span class="feat-ico">📊</span><div><b data-i="feat.f5t">Focus footprint</b><span data-i="feat.f5p">Time actually spent watching per domain, not tabs opened. Off by default, and only records while its page is open.</span></div></div>
-        <div class="feat"><span class="feat-ico">⌨️</span><div><b data-i="feat.f6t">Shortcuts</b><span data-i="feat.f6p">Alt+Shift+C cleans now, Alt+Shift+X cleans and closes every tab. Both work with auto-clean off.</span></div></div>
+        <div class="feat"><span class="feat-ico">⌨️</span><div><b data-i="feat.f6t">Shortcuts</b><span data-i="feat.f6p">Alt+Shift+C cleans now. Alt+Shift+X asks first, then cleans and closes every tab except one. Both work with auto-clean off.</span></div></div>
       </div>
 
       <div class="honest">
@@ -372,7 +372,7 @@ const LANGS = {
     "mock.cook": "Cookies", "mock.prot": "Protected hits", "mock.protV": "3 skipped", "mock.keep": "Keep last", "mock.keepV": "7 days",
     "mock.btn": "Clean 12 sites", "mock.note": "Nothing is removed until the preview says so — scheduled runs clean on their own.",
     "why.title": "Built around one fear", "why.sub": "“If I turn this on, will it log me out of everything?”",
-    "why.c1t": "Preview first", "why.c1p": "Every manual run starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.",
+    "why.c1t": "Preview first", "why.c1p": "Every run from the popup starts with a summary: how many sites matched, how many history entries and cookies will go, and which retention window applies.",
     "why.c2t": "Targeted by default", "why.c2p": "Only the domains on your clean list are touched. Everything else is never included, so a free user has no way to lose data by accident.",
     "why.c3t": "Protected where it counts", "why.c3p": "In Full mode your protected domains are skipped entirely — banks, mail, anything you want to stay signed in to.",
     "feat.title": "What it actually does", "feat.sub": "Nine data types, five triggers, and a domain rule you can explain in one sentence.",
@@ -381,7 +381,7 @@ const LANGS = {
     "feat.f3t": "Per-trigger scope", "feat.f3p": "Clear only history + cache every few hours, deep-clean when the browser closes.",
     "feat.f4t": "Retention window", "feat.f4p": "Keep the last 1, 3, 7 or 30 days — or everything.",
     "feat.f5t": "Focus footprint", "feat.f5p": "Time actually spent watching per domain, not tabs opened. Off by default; free records only while its page is open, Pro keeps recording in the background.",
-    "feat.f6t": "Shortcuts", "feat.f6p": "Alt+Shift+C cleans now, Alt+Shift+X cleans and closes every tab. Both work with auto-clean off.",
+    "feat.f6t": "Shortcuts", "feat.f6p": "Alt+Shift+C cleans now. Alt+Shift+X asks first, then cleans and closes every tab except one. Both work with auto-clean off.",
     "price.title": "Free vs Pro", "price.sub": "The licence buys one thing: the full wipe. The protected list, the footprint data and the CSV export are free.",
     "price.th1": "Capability", "price.th2": "Free", "price.th3": "Pro",
     "price.r1": "Targeted mode (clean list, unlimited)", "price.r2": "Manual + scheduled cleaning", "price.r3": "Preview on manual runs",
@@ -421,7 +421,7 @@ const LANGS = {
     "mock.cook": "Cookie", "mock.prot": "保护名单命中", "mock.protV": "跳过 3 个", "mock.keep": "保留最近", "mock.keepV": "7 天",
     "mock.btn": "清理 12 个站点", "mock.note": "预览确认之前什么都不会删；定时触发按设置自行清理。",
     "why.title": "围绕一个恐惧设计", "why.sub": "“打开它，会不会把所有网站的登录都退了？”",
-    "why.c1t": "先预览", "why.c1p": "每次手动清理都先给摘要：命中多少站点、要删多少条历史和 Cookie、按哪一档保留期算。",
+    "why.c1t": "先预览", "why.c1p": "每次从弹窗发起的清理都先给摘要：命中多少站点、要删多少条历史和 Cookie、按哪一档保留期算。",
     "why.c2t": "默认精准", "why.c2p": "只动清理名单里的域名，其余站点根本不进入范围，所以免费用户没有误删的路径。",
     "why.c3t": "该保护的保护住", "why.c3p": "全面模式下，保护名单里的域名整域跳过 —— 银行、邮箱，任何你想保持登录的站点。",
     "feat.title": "它实际做的事", "feat.sub": "九类数据、五种触发，以及一句话就能讲清的域名规则。",
@@ -430,7 +430,7 @@ const LANGS = {
     "feat.f3t": "按触发器分范围", "feat.f3p": "每几小时只清历史和缓存，关闭浏览器时再深度清理。",
     "feat.f4t": "保留期", "feat.f4p": "保留最近 1 天、3 天、7 天、30 天，或者全部清除。",
     "feat.f5t": "专注足迹", "feat.f5p": "按域名统计你真正在看的时长，而不是开了多少标签页。默认关闭；免费版只在足迹页打开时采集，Pro 关掉页面后继续记录。",
-    "feat.f6t": "快捷键", "feat.f6p": "Alt+Shift+C 立即清理，Alt+Shift+X 清理并关闭所有标签页。关掉自动清理也照样可用。",
+    "feat.f6t": "快捷键", "feat.f6p": "Alt+Shift+C 立即清理；Alt+Shift+X 会先弹确认，确认后清理并关闭除首页外的所有标签页。关掉自动清理也照样可用。",
     "price.title": "免费版与 Pro", "price.sub": "付费只买一件事：全清。保护名单、足迹数据和 CSV 导出都免费。",
     "price.th1": "能力", "price.th2": "免费", "price.th3": "Pro",
     "price.r1": "精准模式（清理名单，不限条数）", "price.r2": "手动 + 定时清理", "price.r3": "手动清理前预览",
@@ -470,7 +470,7 @@ const LANGS = {
     "mock.cook": "Cookie", "mock.prot": "保護リスト該当", "mock.protV": "3 件スキップ", "mock.keep": "保持期間", "mock.keepV": "7 日",
     "mock.btn": "12 サイトを削除", "mock.note": "プレビューを確認するまで削除されません。スケジュール実行は設定どおりに動きます。",
     "why.title": "一つの不安から設計しました", "why.sub": "「オンにしたら、全部ログアウトされるのでは？」",
-    "why.c1t": "まずプレビュー", "why.c1p": "手動で実行するたびに要約から始まります。対象サイト数、消える履歴と Cookie の件数、適用される保持期間。",
+    "why.c1t": "まずプレビュー", "why.c1p": "ポップアップからの実行は必ず要約から始まります。対象サイト数、消える履歴と Cookie の件数、適用される保持期間。",
     "why.c2t": "既定は指定モード", "why.c2p": "触れるのはクリーンリストのドメインだけ。それ以外は範囲に入らないので、無料ユーザーに誤削除の道はありません。",
     "why.c3t": "守るべきものは守る", "why.c3p": "全消去モードでは保護リストのドメインを丸ごと飛ばします。銀行、メール、ログインを保ちたいサイト。",
     "feat.title": "実際にできること", "feat.sub": "九つのデータ種別、五つのトリガー、一文で説明できるドメイン規則。",
@@ -479,7 +479,7 @@ const LANGS = {
     "feat.f3t": "トリガーごとの範囲", "feat.f3p": "数時間ごとは履歴＋キャッシュだけ、ブラウザ終了時は深く削除。",
     "feat.f4t": "保持期間", "feat.f4p": "直近 1 日、3 日、7 日、30 日、またはすべて。",
     "feat.f5t": "フォーカス足跡", "feat.f5p": "開いたタブ数ではなく、実際に見ていた時間をドメインごとに。既定はオフで、無料版は専用ページを開いている間だけ、Pro は閉じても記録を続けます。",
-    "feat.f6t": "ショートカット", "feat.f6p": "Alt+Shift+C で今すぐ削除、Alt+Shift+X で削除してすべてのタブを閉じる。自動削除がオフでも使えます。",
+    "feat.f6t": "ショートカット", "feat.f6p": "Alt+Shift+C で今すぐ削除。Alt+Shift+X は確認後、1 つを残してすべてのタブを閉じます。自動削除がオフでも使えます。",
     "price.title": "無料と Pro", "price.sub": "有料なのは全消去モードだけ。保護リスト、足跡データ、CSV 書き出しは無料です。",
     "price.th1": "機能", "price.th2": "無料", "price.th3": "Pro",
     "price.r1": "指定モード（クリーンリスト、無制限）", "price.r2": "手動＋スケジュール削除", "price.r3": "手動実行前のプレビュー",
@@ -519,7 +519,7 @@ const LANGS = {
     "mock.cook": "Cookies", "mock.prot": "Schutz-Treffer", "mock.protV": "3 übersprungen", "mock.keep": "Behalten", "mock.keepV": "7 Tage",
     "mock.btn": "12 Seiten reinigen", "mock.note": "Entfernt wird erst, wenn die Vorschau es sagt; geplante Läufe reinigen allein.",
     "why.title": "Rund um eine Angst gebaut", "why.sub": "„Meldet mich das überall ab, wenn ich es einschalte?“",
-    "why.c1t": "Erst die Vorschau", "why.c1p": "Jeder manuelle Lauf beginnt mit einer Zusammenfassung: wie viele Seiten betroffen sind, wie viele Verlaufseinträge und Cookies gehen, welches Aufbewahrungsfenster gilt.",
+    "why.c1t": "Erst die Vorschau", "why.c1p": "Jeder Lauf aus dem Popup beginnt mit einer Zusammenfassung: wie viele Seiten betroffen sind, wie viele Verlaufseinträge und Cookies gehen, welches Aufbewahrungsfenster gilt.",
     "why.c2t": "Gezielt als Standard", "why.c2p": "Berührt werden nur die Domains Ihrer Reinigungsliste. Alles andere ist nie im Umfang, ein kostenloser Nutzer kann also nichts versehentlich verlieren.",
     "why.c3t": "Geschützt, wo es zählt", "why.c3p": "Im Vollmodus werden Ihre geschützten Domains komplett übersprungen — Bank, Mail, alles, wo Sie angemeldet bleiben wollen.",
     "feat.title": "Was es tatsächlich tut", "feat.sub": "Neun Datentypen, fünf Auslöser und eine Domainregel, die in einen Satz passt.",
@@ -528,7 +528,7 @@ const LANGS = {
     "feat.f3t": "Umfang pro Auslöser", "feat.f3p": "Alle paar Stunden nur Verlauf + Cache, beim Schließen ein gründlicher Lauf.",
     "feat.f4t": "Aufbewahrung", "feat.f4p": "Letzten Tag, 3, 7 oder 30 Tage behalten — oder alles.",
     "feat.f5t": "Fokus-Fußabdruck", "feat.f5p": "Tatsächlich angesehene Zeit pro Domain, nicht geöffnete Tabs. Standardmäßig aus; kostenlos nur bei geöffneter Seite, Pro zeichnet im Hintergrund weiter auf.",
-    "feat.f6t": "Tastenkombinationen", "feat.f6p": "Alt+Shift+C reinigt sofort, Alt+Shift+X reinigt und schließt alle Tabs. Beides wirkt auch bei ausgeschalteter Automatik.",
+    "feat.f6t": "Tastenkombinationen", "feat.f6p": "Alt+Shift+C reinigt sofort. Alt+Shift+X fragt zuerst nach und schließt dann alle Tabs bis auf einen. Beides wirkt auch bei ausgeschalteter Automatik.",
     "price.title": "Gratis und Pro", "price.sub": "Bezahlt ist nur der Vollmodus. Schutzliste, Fußabdruck-Daten und CSV-Export sind kostenlos.",
     "price.th1": "Funktion", "price.th2": "Gratis", "price.th3": "Pro",
     "price.r1": "Gezielter Modus (Reinigungsliste, unbegrenzt)", "price.r2": "Manuell + geplant reinigen", "price.r3": "Vorschau bei manuellen Läufen",
@@ -568,7 +568,7 @@ const LANGS = {
     "mock.cook": "Cookies", "mock.prot": "Coincidencias protegidas", "mock.protV": "3 omitidos", "mock.keep": "Conservar", "mock.keepV": "7 días",
     "mock.btn": "Limpiar 12 sitios", "mock.note": "Nada se borra hasta que la vista previa lo diga; las programaciones limpian solas.",
     "why.title": "Diseñado alrededor de un miedo", "why.sub": "«Si lo activo, ¿me desconectará de todo?»",
-    "why.c1t": "Primero la vista previa", "why.c1p": "Cada limpieza manual empieza con un resumen: cuántos sitios coinciden, cuántas entradas de historial y cookies se van, y qué ventana de conservación se aplica.",
+    "why.c1t": "Primero la vista previa", "why.c1p": "Cada limpieza desde el popup empieza con un resumen: cuántos sitios coinciden, cuántas entradas de historial y cookies se van, y qué ventana de conservación se aplica.",
     "why.c2t": "Dirigido por defecto", "why.c2p": "Solo se tocan los dominios de tu lista. El resto nunca entra en el alcance, así que un usuario gratuito no puede perder datos por accidente.",
     "why.c3t": "Protegido donde importa", "why.c3p": "En modo completo tus dominios protegidos se omiten por completo: bancos, correo, lo que quieras mantener conectado.",
     "feat.title": "Lo que hace de verdad", "feat.sub": "Nueve tipos de datos, cinco disparadores y una regla de dominios que cabe en una frase.",
@@ -577,7 +577,7 @@ const LANGS = {
     "feat.f3t": "Alcance por disparador", "feat.f3p": "Solo historial + caché cada pocas horas, limpieza profunda al cerrar el navegador.",
     "feat.f4t": "Conservación", "feat.f4p": "Mantener el último día, 3, 7 o 30 días, o todo.",
     "feat.f5t": "Huella de enfoque", "feat.f5p": "Tiempo realmente visto por dominio, no pestañas abiertas. Desactivada por defecto; gratis solo mide con su página abierta, Pro sigue al cerrarla.",
-    "feat.f6t": "Atajos", "feat.f6p": "Alt+Shift+C limpia ahora, Alt+Shift+X limpia y cierra todas las pestañas. Funcionan con la limpieza automática apagada.",
+    "feat.f6t": "Atajos", "feat.f6p": "Alt+Shift+C limpia ahora. Alt+Shift+X pide confirmación y luego cierra todas las pestañas menos una. Funcionan con la limpieza automática apagada.",
     "price.title": "Gratis y Pro", "price.sub": "Lo único de pago es el modo completo. La lista de protección, los datos de la huella y el CSV son gratis.",
     "price.th1": "Capacidad", "price.th2": "Gratis", "price.th3": "Pro",
     "price.r1": "Modo dirigido (lista de limpieza, ilimitada)", "price.r2": "Limpieza manual + programada", "price.r3": "Vista previa en ejecuciones manuales",
@@ -617,7 +617,7 @@ const LANGS = {
     "mock.cook": "Cookies", "mock.prot": "Hits protégés", "mock.protV": "3 ignorés", "mock.keep": "Conserver", "mock.keepV": "7 jours",
     "mock.btn": "Nettoyer 12 sites", "mock.note": "Rien n’est supprimé tant que l’aperçu ne le dit pas ; les planifications nettoient seules.",
     "why.title": "Construit autour d’une peur", "why.sub": "« Si je l’active, vais-je être déconnecté partout ? »",
-    "why.c1t": "L’aperçu d’abord", "why.c1p": "Chaque nettoyage manuel commence par un résumé : combien de sites correspondent, combien d’entrées d’historique et de cookies partent, et quelle fenêtre de conservation s’applique.",
+    "why.c1t": "L’aperçu d’abord", "why.c1p": "Chaque nettoyage lancé depuis le popup commence par un résumé : combien de sites correspondent, combien d’entrées d’historique et de cookies partent, et quelle fenêtre de conservation s’applique.",
     "why.c2t": "Ciblé par défaut", "why.c2p": "Seuls les domaines de votre liste sont touchés. Le reste n’entre jamais dans la portée : un utilisateur gratuit ne peut pas perdre de données par accident.",
     "why.c3t": "Protégé là où ça compte", "why.c3p": "En mode complet, vos domaines protégés sont entièrement ignorés : banque, mail, tout ce où vous voulez rester connecté.",
     "feat.title": "Ce qu’il fait vraiment", "feat.sub": "Neuf types de données, cinq déclencheurs et une règle de domaines qui tient en une phrase.",
@@ -626,7 +626,7 @@ const LANGS = {
     "feat.f3t": "Portée par déclencheur", "feat.f3p": "Historique + cache seulement toutes les quelques heures, nettoyage profond à la fermeture.",
     "feat.f4t": "Conservation", "feat.f4p": "Garder le dernier jour, 3, 7 ou 30 jours — ou tout.",
     "feat.f5t": "Empreinte de concentration", "feat.f5p": "Le temps réellement regardé par domaine, pas les onglets ouverts. Désactivée par défaut ; gratuit seulement quand sa page est ouverte, Pro continue après fermeture.",
-    "feat.f6t": "Raccourcis", "feat.f6p": "Alt+Shift+C nettoie maintenant, Alt+Shift+X nettoie et ferme tous les onglets. Les deux marchent même sans nettoyage auto.",
+    "feat.f6t": "Raccourcis", "feat.f6p": "Alt+Shift+C nettoie maintenant. Alt+Shift+X demande confirmation puis ferme tous les onglets sauf un. Les deux marchent même sans nettoyage auto.",
     "price.title": "Gratuit et Pro", "price.sub": "Seul le mode complet est payant. La liste de protection, les données d’empreinte et l’export CSV sont gratuits.",
     "price.th1": "Capacité", "price.th2": "Gratuit", "price.th3": "Pro",
     "price.r1": "Mode ciblé (liste de nettoyage, illimitée)", "price.r2": "Nettoyage manuel + planifié", "price.r3": "Aperçu sur les exécutions manuelles",
