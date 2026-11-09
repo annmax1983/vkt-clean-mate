@@ -87,8 +87,6 @@ Eine Lizenz deckt zwei Browser ab. Nach Ablauf einer Lizenz laufen die kostenlos
 
 ## Vorschau
 
-> 📸 Store-Material liegt in [`screenshots/`](../screenshots/) — fünf Bilder in 1280×800 plus je eine Promo-Kachel in 1400×560 und 440×280.
-
 | Bild | Inhalt |
 |---|---|
 | [`01-popup.png`](../screenshots/01-popup.png) | Popup in der Toolbar, aktuelle Seite bereits in der Reinigungsliste |
@@ -222,51 +220,6 @@ Wegen dieser zwei optionalen Berechtigungen erscheint bei einer frischen Install
 
 ---
 
-## Entwicklung
-
-```bash
-npm install                   # terser, nur für den Build
-npm run icons                 # icons/*.png neu erzeugen (keine Abhängigkeiten)
-npm run build                 # dist/ + publish/cleanmate-v<version>.zip
-npm run shoot                 # screenshots/ in Store-Größen neu erzeugen
-node tools/check-locales.js   # prüft, ob alle sechs Sprachen denselben Keysatz haben
-```
-
-Laden: `chrome://extensions` → Entwicklermodus → „Entpackte Erweiterung laden" → dieser Ordner.
-
-### Projektstruktur
-
-```
-manifest.json          MV3, service_worker als ES-Modul
-background.js          Zeitpläne, Regelwerk, Löschausführung, Fokusmessung
-license.js             Creem-Lizenz (plugin id: cleanmate)
-common/                store (Defaults/Merge), Domainabgleich, i18n, Formatierung, ui.css
-popup/                 Ein-Klick-Reinigung + Vorschau-Blatt + Aktionen zur aktuellen Seite
-options/               Modus, Datentypen, Auslöser, Listen, Fußabdruck-Schalter, Lizenz
-insights/              Fußabdruck-Seite — Anzeige kostenlos; Aufzeichnung läuft, solange die Seite offen ist (Daueraufzeichnung ist Pro)
-_locales/              en, zh_CN, ja, de, es, fr (je 174 Keys)
-languages/             READMEs in allen Sprachen
-assets/                gemeinsame UI-Symbole
-store-listing/         Store-Texte in sechs Sprachen
-index.html             Landingpage (nicht im Erweiterungs-ZIP)
-promo.html             Promo-Kachel (Screenshot-Ziel) — 1400×560, `?size=small` ergibt 440×280
-screenshots/           Store-Screenshots, neu erzeugt durch `npm run shoot`
-tools/make-icons.js    PNG-Icongenerator ohne Abhängigkeiten
-tools/check-locales.js prüft den Keysatz aller Sprachen
-tools/shoot.js         rendert jede Oberfläche in Store-Größen
-tools/harness/         Mock-chrome.* und eine Testseite, nur für tools/shoot.js
-```
-
-### Zum Fokus-Tracker
-
-- Standardmäßig aus und Teil der bezahlten Stufe.
-- Im Standardmodus wird **nur aufgezeichnet, solange die Fußabdruck-Seite offen ist** (ein langlebiger Port hält sie am Leben). Schließen stoppt die Aufzeichnung.
-- Der Service Worker kann kein `setInterval` nutzen — Sitzungen werden bei Tab-/Fenster-Ereignissen abgeschlossen und von einem Minuten-Alarm nachgezogen.
-- Gespeichert werden nur `domain`, `duration`, `visits` und eine Stundenhäufigkeit. Keine URLs, keine Titel.
-- Kostenlose Nutzer sehen eine Lizenzkarte statt der Seite; es wird kein Port geöffnet, also nichts aufgezeichnet.
-
----
-
 ## Urheberrecht
 
 VKT CleanMate ist ein unabhängiges Werkzeug und steht in keiner Verbindung zu Google, Microsoft oder anderen Browserherstellern. Chrome, Edge und Firefox sind Marken ihrer jeweiligen Inhaber.
@@ -275,18 +228,22 @@ Die Erweiterung löscht Daten über die APIs des Browsers. Sie patcht den Browse
 
 ---
 
-## Hinweis zum Quellcode
+## ❤️ Unterstützen
 
-Das veröffentlichte Paket enthält lesbares JavaScript — keine Verschleierung. `dist/` ist der gebaute, minimierte Stand; der Quellcode in diesem Repository ist die Eingabe dafür. Nichts wird remote geladen: keine `eval`, keine Remote-Skripte, keine dynamischen Importe außerhalb des eigenen Pakets — erzwungen durch die MV3-Content-Security-Policy in `manifest.json`.
+**[👉 Lizenzschlüssel holen](https://annmax1983.com/extensions/cleanmate)** · **[☕ Spendier mir einen Kaffee](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [GitHub](https://github.com/annmax1983/vkt-clean-mate) · [Offizielle Website](https://annmax1983.com/)
 
 ---
 
-## ❤️ Unterstützen
+## Hinweis zum Quellcode
 
-**[👉 Lizenzschlüssel holen](https://annmax1983.com/extensions/cleanmate)** · **[☕ Spendier mir einen Kaffee](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [Quellcode auf GitHub](https://github.com/annmax1983/vkt-clean-mate) · [Offizielle Website](https://annmax1983.com/)
+> ⚠️ **Dieses Repository dient ausschließlich der Projektpräsentation — der vollständige Quellcode wird hier nicht veröffentlicht.** Es enthält nur die Nutzungsdokumentation, die Release-Notizen und Support-Informationen zur Erweiterung.
+
+> 📥 **Installation ausschließlich über die offiziellen Browser-Stores:** Chrome Web Store · Microsoft Edge Add-ons · Firefox-Add-ons (AMO). Von hier werden keine Offline-Installer verteilt.
 
 ---
 
 ## Lizenz
 
 Copyright © 2026 VKT CleanMate. All rights reserved.
+
+Diese Software ist proprietär und quellgeschlossen. Ohne vorherige schriftliche Genehmigung des Autors ist das Dekompilieren, Reverse-Engineering, Knacken, Verändern, Neuverpacken, Weiterverbreiten oder Weiterverkaufen der Software (ganz oder teilweise) streng untersagt.

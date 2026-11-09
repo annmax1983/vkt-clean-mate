@@ -87,8 +87,6 @@ Una licencia cubre dos navegadores. Las funciones gratuitas siguen funcionando c
 
 ## Vista previa
 
-> 📸 El material de la tienda está en [`screenshots/`](../screenshots/): cinco capturas de 1280×800 y dos promocionales de 1400×560 y 440×280.
-
 | Captura | Contenido |
 |---|---|
 | [`01-popup.png`](../screenshots/01-popup.png) | Panel de la barra de herramientas, con el sitio actual ya en la lista de limpieza |
@@ -222,51 +220,6 @@ Esos dos permisos opcionales son la razón por la que una instalación nueva no 
 
 ---
 
-## Desarrollo
-
-```bash
-npm install                   # terser, solo para el empaquetado
-npm run icons                 # regenerar icons/*.png (sin dependencias)
-npm run build                 # dist/ + publish/cleanmate-v<version>.zip
-npm run shoot                 # regenerar screenshots/ en tamaños de tienda
-node tools/check-locales.js   # comprobar que los seis idiomas comparten las mismas claves
-```
-
-Cargar: `chrome://extensions` → Modo de desarrollador → Cargar descomprimida → esta carpeta.
-
-### Estructura del proyecto
-
-```
-manifest.json          MV3, service_worker como módulo ES
-background.js          programación, motor de reglas, ejecutor de limpieza, medición de enfoque
-license.js             licencia Creem (plugin id: cleanmate)
-common/                store (valores por defecto/merge), coincidencia de dominios, i18n, formato, ui.css
-popup/                 limpieza en un clic + hoja de vista previa + acciones del sitio actual
-options/               modo, tipos de datos, disparadores, listas, interruptor de huella, licencia
-insights/              página de huella: ver es gratis; mide mientras la página está abierta (grabación continua es Pro)
-_locales/              en, zh_CN, ja, de, es, fr (174 claves cada uno)
-languages/             READMEs traducidos
-assets/                iconos de UI compartidos
-store-listing/         textos de tienda en seis idiomas
-index.html             página de aterrizaje (no va en el zip)
-promo.html             promocional (objetivo de captura) — 1400×560, `?size=small` da 440×280
-screenshots/           capturas de tienda, regeneradas con `npm run shoot`
-tools/make-icons.js    generador de iconos PNG sin dependencias
-tools/check-locales.js verifica el conjunto de claves de todos los idiomas
-tools/shoot.js         renderiza cada superficie en tamaños de tienda
-tools/harness/         chrome.* simulado y una página falsa, solo para tools/shoot.js
-```
-
-### Sobre el rastreador de enfoque
-
-- Desactivado por defecto y parte de la versión de pago.
-- En el modo por defecto solo mide **mientras la página de huella está abierta** (un puerto persistente la mantiene viva). Al cerrarla, deja de medir.
-- El service worker no puede usar `setInterval`: las sesiones se cierran con eventos de pestaña o ventana y se completan con una alarma de un minuto.
-- Solo se guardan `domain`, `duration`, `visits` y una distribución horaria. Sin URL ni títulos.
-- Los usuarios gratuitos ven una tarjeta de licencia en lugar de la página; no se abre ningún puerto, así que no se registra nada.
-
----
-
 ## Aviso de copyright
 
 VKT CleanMate es una herramienta independiente. No está afiliada a Google, Microsoft ni a ningún fabricante de navegadores. Chrome, Edge y Firefox son marcas de sus respectivos propietarios.
@@ -275,18 +228,22 @@ La extensión elimina datos mediante las API del propio navegador. No modifica e
 
 ---
 
-## Sobre el código fuente
+## ❤️ Apoya el proyecto
 
-El paquete publicado contiene JavaScript legible, sin ofuscación. `dist/` es la versión compilada y minimizada; el código de este repositorio es su entrada. No se carga nada en remoto: no hay `eval`, ni scripts remotos, ni importaciones dinámicas fuera del propio paquete, lo que impone la política de seguridad de contenido MV3 de `manifest.json`.
+**[👉 Obtener una licencia](https://annmax1983.com/extensions/cleanmate)** · **[☕ Invítame a un café](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [GitHub](https://github.com/annmax1983/vkt-clean-mate) · [Sitio oficial](https://annmax1983.com/)
 
 ---
 
-## ❤️ Apoya el proyecto
+## Aviso sobre el código fuente
 
-**[👉 Obtener una licencia](https://annmax1983.com/extensions/cleanmate)** · **[☕ Invítame a un café](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [Código en GitHub](https://github.com/annmax1983/vkt-clean-mate) · [Sitio oficial](https://annmax1983.com/)
+> ⚠️ **Este repositorio es solo para presentar el proyecto: el código fuente completo no se publica aquí.** Solo contiene la documentación de uso, las notas de versión y la información de soporte de la extensión.
+
+> 📥 **Descárgala e instálala únicamente desde las tiendas oficiales de navegadores:** Chrome Web Store · Microsoft Edge Add-ons · Complementos de Firefox (AMO). Desde aquí no se distribuye ningún instalador sin conexión.
 
 ---
 
 ## Licencia
 
 Copyright © 2026 VKT CleanMate. All rights reserved.
+
+Este software es propietario y de código cerrado. Sin autorización previa por escrito del autor, queda estrictamente prohibido descompilar, aplicar ingeniería inversa, crackear, modificar, reempaquetar, redistribuir o revender el programa (total o parcialmente).

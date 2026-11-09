@@ -87,8 +87,6 @@ VKT CleanMate は「決める」と「実行する」を分けました。
 
 ## プレビュー
 
-> 📸 ストア素材は [`screenshots/`](../screenshots/) にあります。1280×800 が 5 枚、1400×560 と 440×280 のプロモ画像が各 1 枚。
-
 | 画像 | 内容 |
 |---|---|
 | [`01-popup.png`](../screenshots/01-popup.png) | ツールバーのポップアップ。現在のサイトはすでにクリーンリスト入り |
@@ -222,51 +220,6 @@ npm run build        # dist/ と publish/cleanmate-v<version>.zip を生成
 
 ---
 
-## 開発
-
-```bash
-npm install                   # ビルド用の terser のみ
-npm run icons                 # icons/*.png を再生成（依存なし）
-npm run build                 # dist/ + publish/cleanmate-v<version>.zip
-npm run shoot                 # ストアサイズで screenshots/ を再生成
-node tools/check-locales.js   # 六言語のキーが揃っているか検証
-```
-
-読み込み：`chrome://extensions` → デベロッパーモード → パッケージ化されていない拡張機能を読み込む → このフォルダ。
-
-### ディレクトリ構成
-
-```
-manifest.json          MV3、service_worker は ES module
-background.js          スケジュール、ルールエンジン、削除実行、フォーカス計測
-license.js             Creem ライセンス（plugin id: cleanmate）
-common/                store（既定値/マージ）、ドメイン照合、i18n、フォーマッタ、ui.css
-popup/                 ワンクリック削除 + プレビューシート + 現在サイトの操作
-options/               モード、データ種別、トリガー、リスト、足跡スイッチ、ライセンス
-insights/              足跡ページ — 閲覧は無料。ページを開いている間だけ収集（常時収集は Pro）
-_locales/              en、zh_CN、ja、de、es、fr（各 174 キー）
-languages/             各言語の README
-assets/                共通 UI アイコン
-store-listing/         六言語のストア文言
-index.html             ランディングページ（拡張機能の zip には含めない）
-promo.html             プロモ画像（撮影対象）—— 1400×560、`?size=small` で 440×280
-screenshots/           ストア用スクリーンショット（`npm run shoot` で再生成）
-tools/make-icons.js    依存なしの PNG アイコン生成器
-tools/check-locales.js 各言語のキー集合を検証
-tools/shoot.js         各画面をストアサイズでレンダリング
-tools/harness/         mock chrome.* とダミーページ（tools/shoot.js 専用）
-```
-
-### フォーカス足跡について
-
-- 既定はオフで、有料機能です。
-- 既定では足跡ページを開いている間だけ収集します（長寿命ポートで維持）。ページを閉じれば停止。
-- Service Worker では `setInterval` が使えません。セッションはタブ／ウィンドウのイベントで確定し、1 分ごとの alarm で補完します。
-- 保存するのは `domain`、`duration`、`visits` と時間帯ヒストグラムのみ。URL もタイトルも保存しません。
-- 無料ユーザーにはライセンス案内カードを表示し、ポートを開かないので何も記録されません。
-
----
-
 ## 著作権について
 
 VKT CleanMate は独立したツールであり、Google、Microsoft、その他ブラウザベンダーとは関係ありません。Chrome、Edge および Firefox は各所有者の商標です。
@@ -275,18 +228,22 @@ VKT CleanMate は独立したツールであり、Google、Microsoft、その他
 
 ---
 
-## ソースコードについて
+## ❤️ サポート
 
-公開パッケージには可読な JavaScript が入っています。難読化はしていません。`dist/` はビルド済みの圧縮版で、このリポジトリのソースがその入力です。リモート読み込みは一切ありません。`eval` もリモートスクリプトも、パッケージ外を指す動的 import もなく、これは `manifest.json` の MV3 コンテンツセキュリティポリシーで強制されています。
+**[👉 ライセンスを取得](https://annmax1983.com/extensions/cleanmate)** · **[☕ コーヒーをおごる](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [GitHub](https://github.com/annmax1983/vkt-clean-mate) · [公式サイト](https://annmax1983.com/)
 
 ---
 
-## ❤️ サポート
+## ソースコードについて
 
-**[👉 ライセンスを取得](https://annmax1983.com/extensions/cleanmate)** · **[☕ コーヒーをおごる](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [GitHub のソース](https://github.com/annmax1983/vkt-clean-mate) · [公式サイト](https://annmax1983.com/)
+> ⚠️ **本リポジトリはプロジェクト紹介のみを目的としており、完全なソースコードは公開していません。** 拡張機能の利用説明・リリースノート・サポート情報のみを掲載しています。
+
+> 📥 **ダウンロードとインストールは公式ブラウザストアから：** Chrome ウェブストア · Microsoft Edge アドオン · Firefox アドオン（AMO）。本リポジトリからオフラインインストーラーを配布することはありません。
 
 ---
 
 ## ライセンス
 
 Copyright © 2026 VKT CleanMate. All rights reserved.
+
+本ソフトウェアはクローズドソースのプロプライエタリソフトウェアです。作者の事前の書面による許諾なく、本ソフトウェアの全部または一部を逆コンパイル・リバースエンジニアリング・クラック・改変・再パッケージ・再配布・転売することを固く禁じます。

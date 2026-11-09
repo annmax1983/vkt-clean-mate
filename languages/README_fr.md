@@ -87,8 +87,6 @@ Une licence couvre deux navigateurs. Les fonctions gratuites continuent de fonct
 
 ## Aperçu
 
-> 📸 Les visuels de la fiche sont dans [`screenshots/`](../screenshots/) : cinq captures en 1280×800 et deux visuels promotionnels en 1400×560 et 440×280.
-
 | Capture | Contenu |
 |---|---|
 | [`01-popup.png`](../screenshots/01-popup.png) | Panneau de la barre d’outils, site courant déjà dans la liste de nettoyage |
@@ -222,62 +220,11 @@ Ces deux autorisations optionnelles expliquent pourquoi une installation neuve n
 
 ---
 
-## Développement
-
-```bash
-npm install                   # terser, uniquement pour le build
-npm run icons                 # régénérer icons/*.png (sans dépendance)
-npm run build                 # dist/ + publish/cleanmate-v<version>.zip
-npm run shoot                 # régénérer screenshots/ aux tailles boutique
-node tools/check-locales.js   # vérifier que les six langues partagent les mêmes clés
-```
-
-Chargement : `chrome://extensions` → Mode développeur → Charger l’extension non empaquetée → ce dossier.
-
-### Structure du projet
-
-```
-manifest.json          MV3, service_worker en module ES
-background.js          planification, moteur de règles, exécution du nettoyage, mesure de concentration
-license.js             licence Creem (plugin id: cleanmate)
-common/                store (valeurs par défaut/fusion), correspondance de domaines, i18n, formats, ui.css
-popup/                 nettoyage en un clic + feuille d’aperçu + actions sur le site courant
-options/               mode, types de données, déclencheurs, listes, interrupteur d’empreinte, licence
-insights/              page d’empreinte — consultation gratuite ; mesure tant que la page est ouverte (mesure permanente : Pro)
-_locales/              en, zh_CN, ja, de, es, fr (174 clés chacun)
-languages/             READMEs traduits
-assets/                icônes d’interface partagées
-store-listing/         textes de boutique en six langues
-index.html             page d’accueil (hors archive de l’extension)
-promo.html             visuel (cible de capture) — 1400×560, `?size=small` donne 440×280
-screenshots/           captures boutique, régénérées par `npm run shoot`
-tools/make-icons.js    générateur d’icônes PNG sans dépendance
-tools/check-locales.js vérifie le jeu de clés de toutes les langues
-tools/shoot.js         rend chaque surface aux tailles boutique
-tools/harness/         chrome.* simulé et une page factice, réservés à tools/shoot.js
-```
-
-### À propos du suivi de concentration
-
-- Désactivé par défaut, et partie de l’offre payante.
-- En mode par défaut, la mesure n’a lieu **que tant que la page d’empreinte est ouverte** (un port persistant la maintient en vie). Fermer la page arrête la mesure.
-- Le service worker ne peut pas utiliser `setInterval` : les sessions sont clôturées sur les événements d’onglet ou de fenêtre et complétées par une alarme d’une minute.
-- Seuls `domain`, `duration`, `visits` et une répartition horaire sont stockés. Ni URL ni titres.
-- Les utilisateurs gratuits voient une carte de licence à la place de la page ; aucun port n’est ouvert, donc rien n’est enregistré.
-
----
-
 ## Mention de copyright
 
 VKT CleanMate est un outil indépendant. Il n’est affilié ni à Google, ni à Microsoft, ni à aucun éditeur de navigateur. Chrome, Edge et Firefox sont des marques de leurs propriétaires respectifs.
 
 L’extension supprime des données via les API du navigateur lui-même. Elle ne modifie pas le navigateur, ne touche pas aux fichiers système et n’installe rien en dehors de son propre dossier.
-
----
-
-## À propos du code source
-
-Le paquet publié contient du JavaScript lisible, sans obfuscation. `dist/` est la version compilée et minifiée ; le code de ce dépôt en est l’entrée. Rien n’est chargé à distance : pas d’`eval`, pas de script distant, pas d’import dynamique hors du paquet, ce qu’impose la politique de sécurité de contenu MV3 de `manifest.json`.
 
 ---
 
@@ -287,6 +234,16 @@ Le paquet publié contient du JavaScript lisible, sans obfuscation. `dist/` est 
 
 ---
 
+## Avis sur le code source
+
+> ⚠️ **Ce dépôt sert uniquement à la présentation du projet — le code source complet n'y est pas publié.** Il ne contient que la documentation d'utilisation, les notes de version et les informations d'assistance de l'extension.
+
+> 📥 **Téléchargement et installation uniquement depuis les boutiques officielles :** Chrome Web Store · Microsoft Edge Add-ons · Modules complémentaires Firefox (AMO). Aucun installateur hors ligne n'est distribué ici.
+
+---
+
 ## Licence
 
 Copyright © 2026 VKT CleanMate. All rights reserved.
+
+Ce logiciel est propriétaire et à code fermé. Sans autorisation écrite préalable de l'auteur, la décompilation, l'ingénierie inverse, le crackage, la modification, le reconditionnement, la redistribution ou la revente du logiciel (en tout ou en partie) sont strictement interdites.

@@ -87,8 +87,6 @@ VKT CleanMate 把"决定"和"执行"分开：
 
 ## 预览
 
-> 📸 商店素材都在 [`screenshots/`](../screenshots/)：五张 1280×800 截图，外加 1400×560 与 440×280 两张宣传图。
-
 | 截图 | 内容 |
 |---|---|
 | [`01-popup.png`](../screenshots/01-popup.png) | 工具栏弹窗，当前站点已在清理名单里 |
@@ -222,51 +220,6 @@ npm run build        # 产出 dist/ 与 publish/cleanmate-v<version>.zip
 
 ---
 
-## 开发
-
-```bash
-npm install                   # 仅打包用的 terser
-npm run icons                 # 重新生成 icons/*.png（零依赖）
-npm run build                 # dist/ + publish/cleanmate-v<version>.zip
-npm run shoot                 # 按商店尺寸重新生成 screenshots/
-node tools/check-locales.js   # 校验六种语言的 key 是否对齐
-```
-
-加载方式：`chrome://extensions` → 开发者模式 → 加载已解压的扩展程序 → 选择本目录。
-
-### 目录结构
-
-```
-manifest.json          MV3，service_worker 用 ES module
-background.js          调度、规则引擎、清理执行器、专注计时
-license.js             Creem 授权（plugin id: cleanmate）
-common/                store（默认值/合并）、域名匹配、i18n、格式化、ui.css
-popup/                 一键清理 + 预览表 + 当前站点操作
-options/               模式、数据类型、触发器、名单、足迹开关、授权
-insights/              足迹页 —— 查看免费；只在页面打开时采集（常驻采集是 Pro）
-_locales/              en、zh_CN、ja、de、es、fr（各 174 个 key）
-languages/             各语言 README
-assets/                共用 UI 图标
-store-listing/         六种语言的商店文案
-index.html             落地页（不进扩展包）
-promo.html             商店宣传图（截图目标）—— 1400×560，加 `?size=small` 为 440×280
-screenshots/           商店截图，由 `npm run shoot` 重新生成
-tools/make-icons.js    零依赖 PNG 图标生成器
-tools/check-locales.js 校验各语言 key 是否一致
-tools/shoot.js         把每个界面渲染成商店尺寸的截图
-tools/harness/         mock chrome.* 与假页面，只给 tools/shoot.js 用
-```
-
-### 关于专注足迹
-
-- 默认关闭，属于付费功能。
-- 默认只在你打开足迹页时采集（靠一条长连接维持）；页面关掉就停止。
-- Service Worker 里不能用 `setInterval`：会话在标签页/窗口事件里结算，再由每分钟一次的 alarm 兜底。
-- 只保存 `domain`、`duration`、`visits` 和小时分布，不存 URL，不存标题。
-- 免费用户看到的是授权说明卡，不会建立连接，因此什么都不会被记录。
-
----
-
 ## 版权声明
 
 VKT CleanMate 是一个独立工具，与 Google、Microsoft 或任何浏览器厂商都没有隶属关系。Chrome、Edge 与 Firefox 是各自所有者的商标。
@@ -275,18 +228,22 @@ VKT CleanMate 是一个独立工具，与 Google、Microsoft 或任何浏览器�
 
 ---
 
-## 源码说明
-
-发布的包里是可读的 JavaScript，没有混淆。`dist/` 是构建后的压缩产物，本仓库里的源码就是构建的输入。没有任何远程加载：扩展里没有 `eval`，没有远程脚本，也没有指向自身包外的动态导入 —— 这一点由 `manifest.json` 里的 MV3 内容安全策略强制。
-
----
-
 ## ❤️ 支持
 
-**[👉 获取授权](https://annmax1983.com/extensions/cleanmate)** · **[☕ 请我喝杯咖啡](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [GitHub 源码](https://github.com/annmax1983/vkt-clean-mate) · [官方网站](https://annmax1983.com/)
+**[👉 获取授权](https://annmax1983.com/extensions/cleanmate)** · **[☕ 请我喝杯咖啡](https://ko-fi.com/annmax?ref=vkt-clean-mate)** · [GitHub](https://github.com/annmax1983/vkt-clean-mate) · [官方网站](https://annmax1983.com/)
 
 ---
 
-## 授权
+## 源码说明
+
+> ⚠️ **本仓库仅用于项目展示，不发布完整源码。** 这里只有扩展的使用说明、更新日志与支持信息。
+
+> 📥 **请前往官方浏览器商店下载安装：** Chrome Web Store · Microsoft Edge Add-ons · Firefox 附加组件（AMO）。本仓库不提供离线安装包，也不向终端用户分发源码包。
+
+---
+
+## 许可证
 
 Copyright © 2026 VKT CleanMate. All rights reserved.
+
+本软件为闭源专有软件。未经作者书面授权，严禁反编译、逆向工程、破解、修改、重新打包、再分发或转售本软件（含全部或部分）。
