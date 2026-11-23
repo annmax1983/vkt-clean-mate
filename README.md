@@ -46,7 +46,7 @@ VKT CleanMate separates the decision from the action:
 | Targeted mode | Cleans only the domains on your clean list. Unlimited entries |
 | Protected list | Domains that are never touched. Protection wins over the clean list, in both modes |
 | Nine data types | History, cache, cookies, download history, form data, local storage, IndexedDB, service workers, saved passwords — each a separate switch |
-| Retention | Keep the last 1 day / 3 days / 7 days / 30 days, or everything |
+| Retention | Keep the last 1 day / 3 days / 7 days / 30 days, or everything. Applies to downloads and to a full clean with no protect list. Targeted history cleaning works URL by URL, so a matched site loses its whole history, not just the entries inside the window |
 | Five triggers | On startup, on browser close, every N minutes, daily at a chosen time, after N minutes idle |
 | Per-trigger scope | e.g. history + cache every few hours, a deep clean including cookies when the browser closes |
 | Shortcuts | `Alt+Shift+C` clean now · `Alt+Shift+X` clean + close all tabs |
