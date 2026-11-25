@@ -45,7 +45,7 @@ VKT CleanMate separates the decision from the action:
 | Preview sheet | Sites found, history entries, cookies, data types and retention, before anything is removed |
 | Targeted mode | Cleans only the domains on your clean list. Unlimited entries |
 | Protected list | Domains that are never touched. Protection wins over the clean list, in both modes |
-| Nine data types | History, cache, cookies, download history, form data, local storage, IndexedDB, service workers, saved passwords — each a separate switch |
+| Eight data types | History, cache, cookies, download history, form data, local storage, IndexedDB, service workers — each a separate switch |
 | Retention | Keep the last 1 day / 3 days / 7 days / 30 days, or everything. Applies to downloads and to a full clean with no protect list. Targeted history cleaning works URL by URL, so a matched site loses its whole history, not just the entries inside the window |
 | Five triggers | On startup, on browser close, every N minutes, daily at a chosen time, after N minutes idle |
 | Per-trigger scope | e.g. history + cache every few hours, a deep clean including cookies when the browser closes |
@@ -73,7 +73,7 @@ A licence covers two browsers. The free features keep working after a licence ex
 
 ### ✅ It can
 
-- Wipe history, cache, cookies, downloads, form data, local storage, IndexedDB, service workers and passwords, in any combination.
+- Wipe history, cache, cookies, downloads, form data, local storage, IndexedDB and service workers, in any combination.
 - Restrict a cleanup to the domains you named — matching the domain and its subdomains, with no regex.
 - Skip the domains you protect, in Full mode.
 - Clean on a schedule, with a different data scope per trigger.
@@ -84,7 +84,7 @@ A licence covers two browsers. The free features keep working after a licence ex
 - Clear DNS caches, router logs, ISP records or server-side logs. Those are not on your device.
 - Restore deleted history. Chromium has no API to write history back, for any extension.
 - Clean another browser's data, another profile, or a synced copy on another device.
-- Limit history, downloads, form data or passwords to a single site. The browser does not expose that; those four are filtered only in Full mode, and the interface says so next to the checkbox.
+- Limit history, downloads or form data to a single site. The browser does not expose that; those three are filtered only in Full mode, and the interface says so next to the checkbox.
 - Guarantee the "on browser close" trigger. It is best-effort: a crash, a forced restart or a power cut can lose that one run.
 - Clean what was never stored. A page you only read in a private window leaves nothing behind.
 - Replace a VPN or defend you against network-level monitoring. It is a self-service tool for your own browser on your own device.
@@ -175,7 +175,9 @@ Both can be rebound at `chrome://extensions/shortcuts`.
 5. Domain rules are expanded to real origins first — `browsingData` accepts origins (`https://example.com`) rather than bare hosts, and does not expand subdomains itself.
 6. A notification reports the result, the last-run timestamp is stored, and the sheet stays reachable from the popup.
 
-One implementation detail worth knowing: `browsingData` only honours `origins` for cache, cookies, local storage, IndexedDB, service workers and file systems. History, downloads, form data and passwords ignore the origin list entirely — so when those types are selected, the run covers the whole profile. The extension says so in the interface instead of pretending otherwise.
+One implementation detail worth knowing: `browsingData` only honours `origins` for cache, cookies, local storage, IndexedDB, service workers and file systems. History, downloads and form data ignore the origin list entirely — so when those types are selected, the run covers the whole profile. The extension says so in the interface instead of pretending otherwise.
+
+Cookies are the exception inside the origin list: the browser deletes them per registrable domain, so clearing `a.example.com` also clears cookies set for `.example.com`. When a protected domain shares that registrable domain with a site on your clean list, CleanMate skips cookies for the whole domain and says so in the preview — cache and storage for the clean site are still removed, because those are origin-scoped and cannot leak across the boundary.
 
 ---
 
@@ -190,8 +192,8 @@ In Targeted mode, only for the domains you listed. That is why the free tier run
 **Can I clean history for one site only?**
 Yes. That needs the optional `history` permission, which is requested at the moment you preview or clean history per site — not at install.
 
-**Does it delete the passwords synced to my Google account?**
-If you tick **Saved passwords**, the browser deletes the local password store, and a signed-in profile can propagate that deletion. The type is off by default and marked in red in the interface for exactly this reason. Leave it off unless you mean it.
+**Does it delete saved passwords?**
+No. Chrome 144 removed password deletion from the extensions API and now ignores that data type, so CleanMate does not ship a switch that would quietly do nothing.
 
 **Does it work in private windows?**
 A private window discards its own data when it closes, so there is nothing left to clean. The extension does not need access to private windows.

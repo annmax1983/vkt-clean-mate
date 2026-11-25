@@ -41,7 +41,7 @@ In einem Satz: **vor dem Löschen sehen, was verschwindet — nach dem Löschen 
 |---|---|
 | Vorschau | Gefundene Seiten, Verlaufseinträge, Cookies, Datentypen und Aufbewahrung vor jedem manuellen Lauf |
 | Gezielter Modus | Löscht nur die Domains Ihrer Reinigungsliste. Unbegrenzt viele Einträge |
-| Neun Datentypen | Verlauf, Cache, Cookies, Downloadverlauf, Formulardaten, lokaler Speicher, IndexedDB, Service Worker, gespeicherte Passwörter — je ein eigener Schalter |
+| Acht Datentypen | Verlauf, Cache, Cookies, Downloadverlauf, Formulardaten, lokaler Speicher, IndexedDB, Service Worker — je ein eigener Schalter |
 | Aufbewahrung | Letzten Tag / 3 Tage / 7 Tage / 30 Tage behalten oder alles |
 | Fünf Auslöser | Beim Start, beim Schließen, alle N Minuten, täglich zu fester Zeit, nach N Minuten Inaktivität |
 | Umfang pro Auslöser | z. B. alle paar Stunden Verlauf + Cache, beim Schließen ein gründlicher Lauf inklusive Cookies |
@@ -67,7 +67,7 @@ Eine Lizenz deckt zwei Browser ab. Nach Ablauf einer Lizenz laufen die kostenlos
 
 ### ✅ Es kann
 
-- Verlauf, Cache, Cookies, Downloads, Formulardaten, lokalen Speicher, IndexedDB, Service Worker und Passwörter in beliebiger Kombination löschen.
+- Verlauf, Cache, Cookies, Downloads, Formulardaten, lokalen Speicher, IndexedDB und Service Worker in beliebiger Kombination löschen.
 - Einen Lauf auf die von Ihnen genannten Domains begrenzen — inklusive Subdomains, ohne Regex.
 - Im Vollmodus die geschützten Domains überspringen.
 - Nach Zeitplan reinigen, mit eigenem Datenumfang pro Auslöser.
@@ -78,7 +78,7 @@ Eine Lizenz deckt zwei Browser ab. Nach Ablauf einer Lizenz laufen die kostenlos
 - DNS-Caches, Router-Protokolle, Provider-Aufzeichnungen oder serverseitige Logs löschen. Die liegen nicht auf Ihrem Gerät.
 - Gelöschten Verlauf wiederherstellen. Chromium bietet keiner Erweiterung eine API, um Verlauf zurückzuschreiben.
 - Daten eines anderen Browsers, eines anderen Profils oder einer auf ein anderes Gerät synchronisierten Kopie löschen.
-- Verlauf, Downloads, Formulardaten oder Passwörter auf eine einzelne Seite begrenzen. Der Browser gibt das nicht her; diese vier werden nur im Vollmodus gefiltert, und die Oberfläche sagt das neben dem Kästchen.
+- Verlauf, Downloads oder Formulardaten auf eine einzelne Seite begrenzen. Der Browser gibt das nicht her; diese drei werden nur im Vollmodus gefiltert, und die Oberfläche sagt das neben dem Kästchen.
 - Den Auslöser „beim Schließen des Browsers" garantieren. Er ist Best-Effort: ein Absturz, ein erzwungener Neustart oder ein Stromausfall kann diesen Lauf verlieren.
 - Löschen, was nie gespeichert wurde. Eine Seite, die Sie nur in einem privaten Fenster gelesen haben, hinterlässt nichts.
 - Ein VPN ersetzen oder gegen Überwachung auf Netzwerkebene schützen. Es ist ein Selbstbedienungswerkzeug für Ihren eigenen Browser auf Ihrem eigenen Gerät.
@@ -163,7 +163,9 @@ Beide lassen sich unter `chrome://extensions/shortcuts` ändern.
 5. Die Domainregeln werden zuerst in echte Origins aufgelöst — `browsingData` akzeptiert Origins (`https://example.com`) statt nackter Hostnamen und expandiert Subdomains nicht selbst.
 6. Eine Benachrichtigung meldet das Ergebnis, der Zeitstempel des Laufs wird gespeichert, und das Blatt bleibt im Popup erreichbar.
 
-Ein Detail, das man kennen sollte: `browsingData` beachtet `origins` nur für Cache, Cookies, lokalen Speicher, IndexedDB, Service Worker und Dateisysteme. Verlauf, Downloads, Formulardaten und Passwörter ignorieren die Origin-Liste vollständig — werden diese Typen gewählt, betrifft der Lauf das gesamte Profil. Die Erweiterung schreibt das in die Oberfläche, statt es zu verschweigen.
+Ein Detail, das man kennen sollte: `browsingData` beachtet `origins` nur für Cache, Cookies, lokalen Speicher, IndexedDB, Service Worker und Dateisysteme. Verlauf, Downloads und Formulardaten ignorieren die Origin-Liste vollständig — werden diese Typen gewählt, betrifft der Lauf das gesamte Profil. Die Erweiterung schreibt das in die Oberfläche, statt es zu verschweigen.
+
+Cookies sind die Ausnahme in der Origin-Liste: Der Browser löscht sie pro registrierbarer Domain, das Löschen von `a.example.com` entfernt also auch Cookies für `.example.com`. Teilen sich eine geschützte Domain und eine Seite der Reinigungsliste dieselbe registrierbare Domain, überspringt CleanMate die Cookies für die ganze Domain und sagt das in der Vorschau; Cache und Speicher der Zielseite werden weiterhin entfernt, weil sie origin-genau sind.
 
 ---
 
@@ -178,8 +180,8 @@ Im gezielten Modus nur für die Domains Ihrer Liste. Deshalb läuft die kostenlo
 **Kann ich den Verlauf nur einer Seite löschen?**
 Ja. Dafür ist die optionale Berechtigung `history` nötig, die erst in dem Moment angefragt wird, in dem Sie Verlauf pro Seite prüfen oder löschen — nicht bei der Installation.
 
-**Werden die mit meinem Google-Konto synchronisierten Passwörter gelöscht?**
-Wenn Sie **Gespeicherte Passwörter** anhaken, löscht der Browser den lokalen Passwortspeicher, und ein angemeldetes Profil kann diese Löschung weiterreichen. Genau deshalb ist dieser Typ standardmäßig aus und in der Oberfläche rot markiert. Lassen Sie ihn aus, wenn Sie es nicht wirklich meinen.
+**Werden gespeicherte Passwörter gelöscht?**
+Nein. Seit Chrome 144 bietet die Erweiterungsschnittstelle keine Passwortlöschung mehr, und der Browser ignoriert diesen Datentyp. Deshalb gibt es in CleanMate keinen solchen Schalter.
 
 **Funktioniert es in privaten Fenstern?**
 Ein privates Fenster verwirft seine Daten beim Schließen, es bleibt also nichts zu löschen. Die Erweiterung braucht keinen Zugriff auf private Fenster.

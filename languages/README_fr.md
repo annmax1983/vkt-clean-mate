@@ -41,7 +41,7 @@ En une phrase : **voir ce qui part avant de supprimer, et savoir ensuite où est
 |---|---|
 | Aperçu | Sites trouvés, entrées d’historique, cookies, types de données et conservation avant toute suppression |
 | Mode ciblé | Ne nettoie que les domaines de votre liste de nettoyage. Entrées illimitées |
-| Neuf types de données | Historique, cache, cookies, historique des téléchargements, données de formulaires, stockage local, IndexedDB, service workers et mots de passe enregistrés, chacun avec son interrupteur |
+| Huit types de données | Historique, cache, cookies, historique des téléchargements, données de formulaires, stockage local, IndexedDB et service workers, chacun avec son interrupteur |
 | Conservation | Garder le dernier jour / 3 jours / 7 jours / 30 jours, ou tout |
 | Cinq déclencheurs | Au démarrage, à la fermeture, toutes les N minutes, chaque jour à une heure fixe, après N minutes d’inactivité |
 | Portée par déclencheur | Par exemple historique + cache toutes les quelques heures, nettoyage profond avec cookies à la fermeture |
@@ -67,7 +67,7 @@ Une licence couvre deux navigateurs. Les fonctions gratuites continuent de fonct
 
 ### ✅ Il sait
 
-- Effacer l’historique, le cache, les cookies, les téléchargements, les données de formulaires, le stockage local, IndexedDB, les service workers et les mots de passe, dans n’importe quelle combinaison.
+- Effacer l’historique, le cache, les cookies, les téléchargements, les données de formulaires, le stockage local, IndexedDB et les service workers, dans n’importe quelle combinaison.
 - Limiter un nettoyage aux domaines que vous avez nommés, sous-domaines compris, sans écrire d’expression régulière.
 - Sauter les domaines que vous protégez, en mode complet.
 - Nettoyer selon un planning, avec une portée de données différente par déclencheur.
@@ -78,7 +78,7 @@ Une licence couvre deux navigateurs. Les fonctions gratuites continuent de fonct
 - Vider les caches DNS, les journaux du routeur, les enregistrements du fournisseur d’accès ou les logs serveur. Ce n’est pas sur votre appareil.
 - Restaurer un historique supprimé. Chromium n’offre à aucune extension d’API pour réécrire l’historique.
 - Nettoyer les données d’un autre navigateur, d’un autre profil ou d’une copie synchronisée sur un autre appareil.
-- Limiter l’historique, les téléchargements, les données de formulaires ou les mots de passe à un seul site. Le navigateur ne l’expose pas ; ces quatre types ne sont filtrés qu’en mode complet, et l’interface le dit à côté de la case.
+- Limiter l’historique, les téléchargements ou les données de formulaires à un seul site. Le navigateur ne l’expose pas ; ces trois types ne sont filtrés qu’en mode complet, et l’interface le dit à côté de la case.
 - Garantir le déclencheur « à la fermeture du navigateur ». C’est du meilleur effort : un plantage, un redémarrage forcé ou une coupure de courant peuvent perdre cette exécution.
 - Nettoyer ce qui n’a jamais été stocké. Une page seulement lue dans une fenêtre privée ne laisse rien.
 - Remplacer un VPN ni vous défendre contre une surveillance au niveau du réseau. C’est un outil en libre-service pour votre propre navigateur sur votre propre appareil.
@@ -163,7 +163,9 @@ Les deux se modifient dans `chrome://extensions/shortcuts`.
 5. Les règles de domaine sont d’abord converties en origines réelles : `browsingData` accepte des origines (`https://example.com`) et non des noms d’hôtes nus, et n’étend pas les sous-domaines de lui-même.
 6. Une notification rend compte du résultat, l’horodatage de l’exécution est enregistré, et la feuille reste accessible depuis le panneau.
 
-Un détail d’implémentation utile à connaître : `browsingData` n’honore `origins` que pour le cache, les cookies, le stockage local, IndexedDB, les service workers et les systèmes de fichiers. L’historique, les téléchargements, les données de formulaires et les mots de passe ignorent complètement cette liste : lorsque ces types sont cochés, l’exécution porte sur tout le profil. L’extension l’écrit dans l’interface au lieu de le cacher.
+Un détail d’implémentation utile à connaître : `browsingData` n’honore `origins` que pour le cache, les cookies, le stockage local, IndexedDB, les service workers et les systèmes de fichiers. L’historique, les téléchargements et les données de formulaires ignorent complètement cette liste : lorsque ces types sont cochés, l’exécution porte sur tout le profil. L’extension l’écrit dans l’interface au lieu de le cacher.
+
+Les cookies sont l’exception dans la liste d’origines : le navigateur les supprime par domaine enregistrable, donc nettoyer `a.example.com` efface aussi les cookies de `.example.com`. Quand un domaine protégé partage ce domaine enregistrable avec un site de la liste, CleanMate ignore les cookies pour tout le domaine et l’indique dans l’aperçu ; le cache et le stockage du site sont quand même supprimés, car ils sont limités à l’origine.
 
 ---
 
@@ -178,8 +180,8 @@ En mode ciblé, uniquement des domaines de votre liste. C’est pourquoi la vers
 **Puis-je nettoyer l’historique d’un seul site ?**
 Oui. Cela nécessite la permission optionnelle `history`, demandée au moment où vous prévisualisez ou nettoyez l’historique par site, pas à l’installation.
 
-**Cela supprime-t-il les mots de passe synchronisés avec mon compte Google ?**
-Si vous cochez **Mots de passe enregistrés**, le navigateur supprime le stockage local des mots de passe, et un profil connecté peut propager cette suppression. Ce type est désactivé par défaut et signalé en rouge dans l’interface précisément pour cette raison. Laissez-le décoché sauf si vous le voulez vraiment.
+**Cela supprime-t-il les mots de passe enregistrés ?**
+Non. Depuis Chrome 144, l’API des extensions ne permet plus de supprimer les mots de passe et le navigateur ignore ce type de données : CleanMate ne propose donc pas cet interrupteur.
 
 **Cela fonctionne-t-il dans les fenêtres privées ?**
 Une fenêtre privée jette ses données à la fermeture, il ne reste donc rien à nettoyer. L’extension n’a pas besoin d’accéder aux fenêtres privées.

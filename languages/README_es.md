@@ -41,7 +41,7 @@ En una frase: **ver qué se borra antes de borrar, y saber después en qué se f
 |---|---|
 | Vista previa | Sitios encontrados, entradas de historial, cookies, tipos de datos y conservación antes de borrar nada |
 | Modo dirigido | Limpia solo los dominios de tu lista de limpieza. Entradas ilimitadas |
-| Nueve tipos de datos | Historial, caché, cookies, historial de descargas, datos de formularios, almacenamiento local, IndexedDB, service workers y contraseñas guardadas, cada uno con su interruptor |
+| Ocho tipos de datos | Historial, caché, cookies, historial de descargas, datos de formularios, almacenamiento local, IndexedDB y service workers, cada uno con su interruptor |
 | Conservación | Mantener el último día / 3 días / 7 días / 30 días, o todo |
 | Cinco disparadores | Al arrancar, al cerrar el navegador, cada N minutos, a diario a una hora fija, tras N minutos inactivo |
 | Alcance por disparador | Por ejemplo, historial + caché cada pocas horas y una limpieza profunda con cookies al cerrar |
@@ -67,7 +67,7 @@ Una licencia cubre dos navegadores. Las funciones gratuitas siguen funcionando c
 
 ### ✅ Puede
 
-- Borrar historial, caché, cookies, descargas, datos de formularios, almacenamiento local, IndexedDB, service workers y contraseñas en cualquier combinación.
+- Borrar historial, caché, cookies, descargas, datos de formularios, almacenamiento local, IndexedDB y service workers en cualquier combinación.
 - Limitar una limpieza a los dominios que hayas escrito, incluyendo sus subdominios y sin escribir expresiones regulares.
 - Saltarse los dominios que proteges, en modo completo.
 - Limpiar según un horario, con un alcance de datos distinto por disparador.
@@ -78,7 +78,7 @@ Una licencia cubre dos navegadores. Las funciones gratuitas siguen funcionando c
 - Borrar cachés DNS, registros del router, registros del proveedor ni logs del servidor. Eso no está en tu dispositivo.
 - Restaurar el historial borrado. Chromium no ofrece a ninguna extensión una API para escribirlo de vuelta.
 - Limpiar los datos de otro navegador, de otro perfil ni de una copia sincronizada en otro dispositivo.
-- Limitar el historial, las descargas, los datos de formularios o las contraseñas a un solo sitio. El navegador no lo expone; esos cuatro tipos se filtran solo en modo completo y la interfaz lo dice junto a la casilla.
+- Limitar el historial, las descargas o los datos de formularios a un solo sitio. El navegador no lo expone; esos tres tipos se filtran solo en modo completo y la interfaz lo dice junto a la casilla.
 - Garantizar el disparador «al cerrar el navegador». Es un mejor esfuerzo: un cierre inesperado, un reinicio forzado o un corte de luz pueden perder esa ejecución.
 - Limpiar lo que nunca se guardó. Una página que solo leíste en una ventana privada no deja nada.
 - Sustituir a una VPN ni defenderte de la monitorización a nivel de red. Es una herramienta de autoservicio para tu propio navegador en tu propio dispositivo.
@@ -163,7 +163,9 @@ Ambos se pueden cambiar en `chrome://extensions/shortcuts`.
 5. Las reglas de dominio se convierten primero en orígenes reales: `browsingData` acepta orígenes (`https://example.com`) y no nombres de host desnudos, y no expande subdominios por sí mismo.
 6. Una notificación informa del resultado, se guarda la marca de tiempo de la ejecución y la hoja sigue accesible desde el panel.
 
-Un detalle de implementación que conviene conocer: `browsingData` solo respeta `origins` para caché, cookies, almacenamiento local, IndexedDB, service workers y sistemas de archivos. El historial, las descargas, los datos de formularios y las contraseñas ignoran por completo esa lista, así que al elegir esos tipos la ejecución abarca todo el perfil. La extensión lo dice en la interfaz en lugar de disimularlo.
+Un detalle de implementación que conviene conocer: `browsingData` solo respeta `origins` para caché, cookies, almacenamiento local, IndexedDB, service workers y sistemas de archivos. El historial, las descargas y los datos de formularios ignoran por completo esa lista, así que al elegir esos tipos la ejecución abarca todo el perfil. La extensión lo dice en la interfaz en lugar de ocultarlo.
+
+Las cookies son la excepción dentro de la lista de orígenes: el navegador las borra por dominio registrable, así que limpiar `a.example.com` también borra las cookies de `.example.com`. Cuando un dominio protegido comparte ese dominio registrable con un sitio de la lista, CleanMate omite las cookies de todo el dominio y lo indica en la vista previa; la caché y el almacenamiento del sitio se siguen borrando porque están limitados al origen.
 
 ---
 
@@ -178,8 +180,8 @@ En modo dirigido, solo de los dominios de tu lista. Por eso la versión gratuita
 **¿Puedo limpiar el historial de un solo sitio?**
 Sí. Requiere el permiso opcional `history`, que se pide en el momento de previsualizar o limpiar historial por sitio, no al instalar.
 
-**¿Borra las contraseñas sincronizadas con mi cuenta de Google?**
-Si marcas **Contraseñas guardadas**, el navegador elimina el almacén local de contraseñas y un perfil con sesión iniciada puede propagar ese borrado. Ese tipo está desactivado por defecto y marcado en rojo en la interfaz justo por esto. Déjalo apagado salvo que lo quieras de verdad.
+**¿Borra las contraseñas guardadas?**
+No. Desde Chrome 144, la API de extensiones ya no permite borrar contraseñas y el navegador ignora ese tipo de dato, así que CleanMate no ofrece ese interruptor.
 
 **¿Funciona en ventanas privadas?**
 Una ventana privada descarta sus datos al cerrarse, así que no queda nada que limpiar. La extensión no necesita acceso a ventanas privadas.
